@@ -1,37 +1,49 @@
-// pages/index.js
-import Link from 'next/link';
+import Head from 'next/head';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function Home() {
   const recipes = [
-    { id: 1, title: 'Spaghetti Carbonara', ingredients: 'Spaghetti, eggs, cheese, pancetta' },
-    { id: 2, title: 'Chicken Curry', ingredients: 'Chicken, curry powder, coconut milk' },
-    { id: 3, title: 'Vegetable Stir Fry', ingredients: 'Mixed vegetables, soy sauce, garlic' },
+    { id: 1, title: 'Spaghetti Carbonara', description: 'A classic Italian pasta dish with eggs, cheese, pancetta, and pepper.' },
+    { id: 2, title: 'Chicken Tikka Masala', description: 'A flavorful Indian dish with grilled chicken in a creamy tomato sauce.' },
+    { id: 3, title: 'Chocolate Chip Cookies', description: 'Crispy on the edges, chewy in the middle, and loaded with chocolate chips.' },
+    { id: 4, title: 'Margherita Pizza', description: 'A simple yet delicious pizza with fresh mozzarella, tomatoes, and basil.' },
+    { id: 5, title: 'Beef Stroganoff', description: 'A hearty dish of sautéed beef in a creamy mushroom sauce, served over egg noodles.' },
+    { id: 6, title: 'Caesar Salad', description: 'A fresh salad with romaine lettuce, croutons, parmesan cheese, and Caesar dressing.' },
+    { id: 7, title: 'Shrimp Scampi', description: 'Garlic butter shrimp tossed in a white wine sauce and served over pasta.' },
+    { id: 8, title: 'Lemon Herb Chicken', description: 'Juicy grilled chicken marinated with lemon, garlic, and fresh herbs.' },
+    { id: 9, title: 'Vegetable Stir Fry', description: 'A mix of fresh vegetables stir-fried in a savory soy-ginger sauce.' },
+    { id: 10, title: 'Apple Pie', description: 'A classic American dessert with cinnamon-spiced apples in a flaky crust.' },
   ];
+  
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Recipe Forum</h1>
-      <p className="text-lg mb-8 text-center text-gray-600">Welcome to the Recipe Forum! Check out some delicious recipes below.</p>
+    <>
+      <Head>
+        <title>Recipe Forum</title>
+        <meta name="description" content="A community-driven recipe sharing forum" />
+      </Head>
+      
+      <Header />
 
-      <div className="recipe-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {recipes.map((recipe) => (
-          <div key={recipe.id} className="recipe-card bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">{recipe.title}</h2>
-            <p className="text-gray-600 mb-4">{recipe.ingredients}</p>
-            {/* Correct Link usage */}
-            <Link href={`/recipe/${recipe.id}`} className="text-blue-500 hover:underline">
-              View Recipe
-            </Link>
-          </div>
-        ))}
-      </div>
+      <main style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>Welcome to the Recipe Forum!</h1>
+        <p>Share your favorite recipes, discover new dishes, and connect with fellow food lovers.</p>
 
-      {/* Button to add a new recipe */}
-      <div className="text-center mt-8">
-        <Link href="/add-recipe" className="inline-block bg-green-500 text-white py-3 px-6 rounded-full hover:bg-green-600 transition-colors duration-300 font-semibold">
-          Add New Recipe
-        </Link>
-      </div>
-    </div>
+        <section style={{ marginTop: '40px' }}>
+          <h2>Featured Recipes</h2>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {recipes.map((recipe) => (
+              <li key={recipe.id} style={{ margin: '20px 0', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
+                <h3>{recipe.title}</h3>
+                <p>{recipe.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+
+      <Footer />
+    </>
   );
 }

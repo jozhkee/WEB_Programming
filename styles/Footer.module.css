@@ -1,0 +1,13 @@
+.footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+    width: 100%;
+    max-width: 100vw;  /* Ensures it does not exceed viewport width */
+    font-size: 14px;
+    overflow: hidden;  /* Prevents horizontal scrolling */
+    position: relative;
+  }
+  
