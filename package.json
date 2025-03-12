@@ -1,16 +1,27 @@
 {
     "name": "your-project-name",
     "version": "1.0.0",
-    "type": "module",  
+    "type": "module",
     "scripts": {
-      "dev": "next dev",
-      "build": "next build",
-      "start": "next start"
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
     },
     "dependencies": {
-      "next": "^12.0.0",   
-      "react": "^17.0.0",  
-      "react-dom": "^17.0.0"  
+        "dotenv": "^16.4.7",
+        "drizzle-orm": "^0.40.0",
+        "next": "^15.2.2",
+        "pg": "^8.14.0",
+        "postgres": "^3.4.5",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "sqlite3": "^5.1.7"
+    },
+    "devDependencies": {
+        "@types/pg": "^8.11.11",
+        "@types/react": "19.0.10",
+        "drizzle-kit": "^0.30.5",
+        "tsx": "^4.19.3",
+        "typescript": "5.8.2"
     }
-  }
-  
+}

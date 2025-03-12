@@ -29,3 +29,6 @@ out/
 
 # Cache
 .cache/
+
+# Drizzle
+/drizzle/meta/

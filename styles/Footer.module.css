@@ -5,9 +5,9 @@
     padding: 15px;
     margin-top: 40px;
     width: 100%;
-    max-width: 100vw;  /* Ensures it does not exceed viewport width */
+    max-width: 100vw;  
     font-size: 14px;
-    overflow: hidden;  /* Prevents horizontal scrolling */
+    overflow: hidden;  
     position: relative;
   }
   
