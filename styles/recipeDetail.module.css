@@ -12,7 +12,7 @@
 .backLink {
   display: inline-block;
   margin-bottom: 30px;
-  color: #4caf50;
+  color: #0070f3;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
@@ -20,11 +20,11 @@
 }
 
 .backLink:hover {
-  color: #66bb6a;
+  color: #0070f3;
 }
 
 .recipeTitle {
-  color: #4caf50;
+  color: #ffff;
   margin-bottom: 15px;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .metadataLabel {
-  color: #4caf50;
+  color: #ffff;
 }
 
 .contentWrapper {
@@ -65,7 +65,7 @@
 }
 
 .sectionTitle {
-  color: #4caf50;
+  color: #ffff;
   border-bottom: 2px solid #333;
   padding-bottom: 10px;
 }
@@ -86,7 +86,7 @@
 }
 
 .stepNumber {
-  color: #4caf50;
+  color: #ffff;
 }
 
 .loadingMessage {

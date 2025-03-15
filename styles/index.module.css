@@ -20,7 +20,7 @@
 }
 
 .sectionTitle {
-  color: #4caf50;
+  color: #ffff;
   margin-bottom: 25px;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .recipeTitle {
-  color: #4caf50;
+  color: #ffff;
   margin-bottom: 10px;
 }
 
@@ -67,7 +67,7 @@
 .viewButton {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #0070f3;
   color: white;
   border: none;
   border-radius: 4px;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import styles from "../styles/Header.module.css";
+import styles from "../styles/header.module.css";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
