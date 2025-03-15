@@ -8,7 +8,7 @@ export default function Home({ recipes = [] }) {
   return (
     <>
       <Head>
-        <title>Recipe Forum</title>
+        <title>RecipeHub</title>
         <meta
           name="description"
           content="A community-driven recipe sharing forum"
@@ -16,7 +16,7 @@ export default function Home({ recipes = [] }) {
       </Head>
       <Header />
       <main className={styles.mainContainer}>
-        <h1 className={styles.welcomeTitle}>Welcome to the Recipe Forum!</h1>
+        <h1 className={styles.welcomeTitle}>Welcome to the RecipeHub!</h1>
         <p className={styles.welcomeText}>
           Share your favorite recipes, discover new dishes, and connect with
           fellow food lovers.
