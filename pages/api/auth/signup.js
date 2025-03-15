@@ -1,54 +1,62 @@
-import { useState } from "react";
-import bcrypt from "bcryptjs";
+import { authUtils } from './auth';
+import { db } from '../../../src/'; 
+import { users } from '../../../src/db/schema';
 
-export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+export default async function handler(req, res) {
+  // Only allow POST method
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password: hashedPassword }),
-    });
-
-    const data = await res.json();
-
-    if (data.error) {
-      setMessage(data.error);
-    } else {
-      setMessage("Sign-up successful! Please log in.");
+  try {
+    const { email, password } = req.body;
+    
+    // Basic validation
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
     }
-  };
-
-  return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign Up</button>
-      </form>
-      {message && <p>{message}</p>}
-    </div>
-  );
+    
+    // Check if user already exists
+    const existingUser = await authUtils.getUserByEmail(email);
+    
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
+    
+    // Hash password
+    const hashedPassword = await authUtils.hashPassword(password);
+    
+    // Create new user in database - match your schema exactly
+    try {
+      // Insert using the schema fields you actually have
+      await db.insert(users).values({
+        email: email,
+        password: hashedPassword
+      });
+      
+      // Fetch the created user
+      const newUser = await authUtils.getUserByEmail(email);
+      
+      if (!newUser) {
+        throw new Error('Failed to create user');
+      }
+      
+      // Generate JWT token
+      const token = authUtils.generateToken(newUser);
+      
+      // Return user data and token (omitting password)
+      const { password: _, ...userWithoutPassword } = newUser;
+      
+      return res.status(201).json({
+        user: userWithoutPassword,
+        token
+      });
+    } catch (insertError) {
+      console.error('Insert error:', insertError);
+      throw new Error(`Failed to create user: ${insertError.message}`);
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    return res.status(500).json({ message: 'Server error', error: error.message });
+  }
 }

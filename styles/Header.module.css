@@ -12,6 +12,17 @@
 
 .title {
   margin: 0;
+  font-size: 24px; 
+  color: white; 
+  text-decoration: none;
+  cursor: pointer; 
+}
+
+.title:visited,
+.title:hover,
+.title:active {
+  color: white;
+  text-decoration: none;
 }
 
 .authButtons {
@@ -35,7 +46,6 @@
   color: #0070f3;
   border: 2px solid #0070f3;
 }
-
 
 .signup {
   background: #0070f3;

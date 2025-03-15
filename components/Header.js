@@ -1,10 +1,14 @@
-import styles from '../styles/Header.module.css';
 import Link from 'next/link';
+import styles from '../styles/Header.module.css';
 
 export default function Header() {
   return (
     <header className={styles.header}>
-      <h1 className={styles.title}>Recipe Forum WEBProgramming</h1>
+      {/* Clickable Title without changing style */}
+      <Link href="/" passHref legacyBehavior>
+        <a className={styles.title}>Recipe Forum WEBProgramming</a>
+      </Link>
+
       <div className={styles.authButtons}>
         <Link href="/login">
           <button className={`${styles.button} ${styles.login}`}>Login</button>

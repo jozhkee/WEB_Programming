@@ -1,50 +1,48 @@
-import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { authUtils } from './auth';
+import { db } from '../../../src/';
+import { users } from '../../../src/db/schema';
 
-export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const router = useRouter();
+export default async function handler(req, res) {
+  // Only allow POST method
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
+  try {
+    const { email, password } = req.body;
     
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (res?.error) {
-      setError("Invalid credentials");
-    } else {
-      router.push("/"); // Redirect to the home page or dashboard
+    // Basic validation
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
     }
-  };
-
-  return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSignIn}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
-  );
+    
+    // Find user by email
+    const user = await authUtils.getUserByEmail(email);
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    
+    // Compare password
+    const isPasswordValid = await authUtils.verifyPassword(password, user.password);
+    
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    
+    // Generate JWT token
+    const token = authUtils.generateToken(user);
+    
+    // Don't send the password back to client
+    const { password: _, ...userWithoutPassword } = user;
+    
+    // Return user data and token
+    return res.status(200).json({
+      user: userWithoutPassword,
+      token
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).json({ message: 'Server error', error: error.message });
+  }
 }
