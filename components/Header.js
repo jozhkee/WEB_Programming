@@ -40,7 +40,7 @@ export default function Header() {
     <header className={styles.header}>
       {/* Clickable Title without changing style */}
       <Link href="/" passHref legacyBehavior>
-        <a className={styles.title}>Recipe Forum WEBProgramming</a>
+        <a className={styles.title}>RecipeHub</a>
       </Link>
 
       <div className={styles.authButtons}>
