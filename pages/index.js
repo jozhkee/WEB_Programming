@@ -1,8 +1,10 @@
 import Head from "next/head";
+import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import styles from "../styles/index.module.css";
 
-export default function Home({ recipes }) {
+export default function Home({ recipes = [] }) {
   return (
     <>
       <Head>
@@ -12,37 +14,46 @@ export default function Home({ recipes }) {
           content="A community-driven recipe sharing forum"
         />
       </Head>
-
       <Header />
-
-      <main style={{ padding: "20px", textAlign: "center" }}>
-        <h1>Welcome to the Recipe Forum!</h1>
-        <p>
+      <main className={styles.mainContainer}>
+        <h1 className={styles.welcomeTitle}>Welcome to the Recipe Forum!</h1>
+        <p className={styles.welcomeText}>
           Share your favorite recipes, discover new dishes, and connect with
           fellow food lovers.
         </p>
-
-        <section style={{ marginTop: "40px" }}>
-          <h2>Featured Recipes</h2>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {recipes.map((recipe) => (
-              <li
-                key={recipe.id}
-                style={{
-                  margin: "20px 0",
-                  padding: "10px",
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                }}
-              >
-                <h3>{recipe.title}</h3>
-                <p>{recipe.description}</p>
-              </li>
-            ))}
-          </ul>
+        <section className={styles.featuredSection}>
+          <h2 className={styles.sectionTitle}>Featured Recipes</h2>
+          {recipes && recipes.length > 0 ? (
+            <ul className={styles.recipeList}>
+              {recipes.map((recipe) => (
+                <li key={recipe.id} className={styles.recipeCard}>
+                  <Link
+                    href={`/recipes/${recipe.id}`}
+                    className={styles.recipeLink}
+                  >
+                    <div>
+                      <h3 className={styles.recipeTitle}>{recipe.title}</h3>
+                      <p className={styles.recipeDescription}>
+                        {recipe.description}
+                      </p>
+                      <div className={styles.recipeMetadata}>
+                        <span>Prep: {recipe.prepTime} mins</span>
+                        <span>Cook: {recipe.cookTime} mins</span>
+                        <span>Servings: {recipe.servings}</span>
+                      </div>
+                      <button className={styles.viewButton}>View Recipe</button>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.noRecipes}>
+              No recipes found. Check back soon!
+            </p>
+          )}
         </section>
       </main>
-
       <Footer />
     </>
   );
@@ -50,8 +61,17 @@ export default function Home({ recipes }) {
 
 // Fetch data from the API
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/recipes");
-  const recipes = await res.json();
+  try {
+    const res = await fetch("http://localhost:3000/api/recipes");
 
-  return { props: { recipes } };
+    if (!res.ok) {
+      throw new Error(`API returned ${res.status}`);
+    }
+
+    const recipes = await res.json();
+    return { props: { recipes } };
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    return { props: { recipes: [] } };
+  }
 }
