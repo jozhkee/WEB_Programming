@@ -9,9 +9,20 @@ export default function Login() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Validate email format
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
     
     try {
       const response = await fetch('/api/auth/login', {  
@@ -25,13 +36,11 @@ export default function Login() {
       const data = await response.json();
       
       if (response.ok) {
-        // Store the JWT token in localStorage
+        console.log('Saving email to localStorage:', email);
+        
         localStorage.setItem('authToken', data.token);
-        
-        // Store user data (optional)
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Redirect to home page
+        localStorage.setItem('userEmail', email);
+
         router.push('/');
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');

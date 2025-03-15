@@ -9,9 +9,21 @@ export default function Signup() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    // Validate email format
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -22,8 +34,12 @@ export default function Signup() {
       });
       const data = await response.json();
       if (response.ok) {
+        // Store the authentication token and email
         localStorage.setItem('authToken', data.token);
-        router.push('/');  
+        localStorage.setItem('userEmail', email);
+        
+        // Redirect to the index page
+        router.push('/');
       } else {
         setError(data.message || 'Signup failed. Please try again.');
       }
