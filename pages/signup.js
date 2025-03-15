@@ -12,23 +12,18 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
     try {
-      const response = await fetch('/api/auth/signup', {  
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-      
       const data = await response.json();
-      
       if (response.ok) {
-        // You could automatically log the user in here by storing the token
-        // localStorage.setItem('authToken', data.token);
-        // Or just redirect to login page as you currently do
-        router.push('/login');
+        localStorage.setItem('authToken', data.token);
+        router.push('/');  
       } else {
         setError(data.message || 'Signup failed. Please try again.');
       }
@@ -40,7 +35,7 @@ export default function Signup() {
 
   return (
     <div>
-      <Header /> 
+      <Header />
       <div className={styles['form-container']}>
         <h1 className={styles.heading}>Sign Up</h1>
         <form onSubmit={handleSubmit}>
@@ -63,7 +58,7 @@ export default function Signup() {
           {error && <p className={styles['error-message']}>{error}</p>}
           <button type="submit" className={styles.button}>Sign Up</button>
         </form>
-        <a href="/login" className={styles['link']}>Already have an account? Login</a>
+        <a href="/login" className={styles.link}>Already have an account? Login</a>
       </div>
     </div>
   );
