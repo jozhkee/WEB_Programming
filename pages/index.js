@@ -7,14 +7,20 @@ export default function Home({ recipes }) {
     <>
       <Head>
         <title>Recipe Forum</title>
-        <meta name="description" content="A community-driven recipe sharing forum" />
+        <meta
+          name="description"
+          content="A community-driven recipe sharing forum"
+        />
       </Head>
 
       <Header />
 
       <main style={{ padding: "20px", textAlign: "center" }}>
         <h1>Welcome to the Recipe Forum!</h1>
-        <p>Share your favorite recipes, discover new dishes, and connect with fellow food lovers.</p>
+        <p>
+          Share your favorite recipes, discover new dishes, and connect with
+          fellow food lovers.
+        </p>
 
         <section style={{ marginTop: "40px" }}>
           <h2>Featured Recipes</h2>

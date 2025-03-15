@@ -1,78 +1,77 @@
 /* Keep the container at the top of the page */
 .form-container {
-    width: 100%;
-    max-width: 400px;  /* Limit the width of the form */
-    margin: 20px auto 0 auto;  /* Add some margin at the top, but keep it centered horizontally */
-    padding: 20px;
-    background-color: #1e1e1e;  /* Apply background color to the container */
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  /* Heading style */
-  .heading {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  /* Form input field styles */
-  .form-control-dark {
-    background-color: #333;
-    border-color: var(--bs-gray);
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100%;  /* Ensure the input fields take full width of the container */
-    margin-bottom: 15px;
-    box-sizing: border-box;
-  }
-  
-  .form-control-dark:focus {
-    border-color: #fff;
-    box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
-  }
-  
-  /* Button styles */
-  .button {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    width: 100%;  /* Ensure the button takes full width of the container */
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  .button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  /* Error message style */
-  .error-message {
-    color: #f44336;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    text-align: center;
-  }
-  
-  /* Link style */
-  .link {
-    display: block;
-    text-align: center;
-    color: #007bff;
-    margin-top: 20px;
-    text-decoration: none;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
+  width: 100%;
+  max-width: 400px; /* Limit the width of the form */
+  margin: 20px auto 0 auto; /* Add some margin at the top, but keep it centered horizontally */
+  padding: 20px;
+  background-color: #1e1e1e; /* Apply background color to the container */
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Heading style */
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Form input field styles */
+.form-control-dark {
+  background-color: #333;
+  border-color: var(--bs-gray);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%; /* Ensure the input fields take full width of the container */
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.form-control-dark:focus {
+  border-color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+/* Button styles */
+.button {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  width: 100%; /* Ensure the button takes full width of the container */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Error message style */
+.error-message {
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Link style */
+.link {
+  display: block;
+  text-align: center;
+  color: #007bff;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

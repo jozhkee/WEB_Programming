@@ -1,4 +1,4 @@
-import { db } from "../../src/"; 
+import { db } from "../../src/";
 import { recipes } from "../../src/db/schema";
 
 export default async function handler(req, res) {

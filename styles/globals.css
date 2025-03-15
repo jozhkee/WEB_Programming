@@ -3,7 +3,7 @@
 }
 .form-control-dark:focus {
   border-color: #fff;
-  box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
 }
 
 .text-small {
@@ -15,17 +15,10 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #121212; /* Solid dark color */
   color: white;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
-
-
-
-
-
-
-

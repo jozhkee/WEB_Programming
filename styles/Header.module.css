@@ -1,21 +1,21 @@
 .header {
-  font-family: 'Lora', sans-serif;
+  font-family: "Lora", sans-serif;
   background-color: #283d55;
   color: white;
   padding: 20px;
   font-size: 24px;
   border-radius: 5px;
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
 }
 
 .title {
   margin: 0;
-  font-size: 24px; 
-  color: white; 
+  font-size: 24px;
+  color: white;
   text-decoration: none;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .title:visited,
@@ -65,17 +65,17 @@
 .userSection {
   display: flex;
   align-items: center;
-  gap: 15px; 
+  gap: 15px;
 }
 
 .userEmail {
-  white-space: nowrap; 
-  overflow: visible; 
+  white-space: nowrap;
+  overflow: visible;
   color: #333;
   font-weight: 500;
 }
 
 .logout {
-  background-color: #ffff; 
+  background-color: #ffff;
   white-space: nowrap;
 }
