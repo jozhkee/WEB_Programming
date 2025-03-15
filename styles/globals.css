@@ -14,10 +14,19 @@
   outline: 0;
 }
 
+:root {
+  --background-primary: #1a1a1a;
+  --background-secondary: #2d2d2d;
+  --background-input: #333333;
+  --border-color: #404040;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+}
+
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #121212; /* Solid dark color */
-  color: white;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
   overflow-x: hidden;

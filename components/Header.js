@@ -38,7 +38,6 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      {/* Clickable Title without changing style */}
       <Link href="/" passHref legacyBehavior>
         <a className={styles.title}>RecipeHub</a>
       </Link>
@@ -49,6 +48,11 @@ export default function Header() {
             <span style={{ marginRight: "10px", whiteSpace: "nowrap" }}>
               Welcome, {userEmail}
             </span>
+            <Link href="/addRecipe">
+              <button className={`${styles.button} ${styles.addRecipe}`}>
+                Add Recipe
+              </button>
+            </Link>
             <button
               onClick={handleLogout}
               className={`${styles.button} ${styles.login}`}
