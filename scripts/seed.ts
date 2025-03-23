@@ -3,23 +3,23 @@ import { recipes, users } from "../src/db/schema";
 
 async function seedDatabase() {
   try {
-    // Create a test user
-    const [existingUser] = await db.select().from(users).limit(1);
-    let user = existingUser;
+    // Insert a user and retrieve the created user ID
+    const [user] = await db
+      .insert(users)
+      .values([
+        {
+          email: "admin@example.com",
+          password: "securepassword", // Hash in real apps!
+        },
+      ])
+      .returning({ id: users.id }); // Only return the user ID
 
     if (!user) {
-      const [newUser] = await db
-        .insert(users)
-        .values({
-          email: "testuser@example.com",
-          password: "securepassword123", // Hashing is recommended in production
-        })
-        .returning();
-      user = newUser;
+      throw new Error("Failed to create user.");
     }
 
+    // Insert recipes with the created user ID
     await db.insert(recipes).values([
-      // Pasta
       {
         title: "Spaghetti Carbonara",
         description:
@@ -43,8 +43,6 @@ async function seedDatabase() {
         category: "Pasta",
         user_id: user.id,
       },
-
-      // Desserts
       {
         title: "Chocolate Cake",
         description: "Rich and moist chocolate cake.",
@@ -67,8 +65,6 @@ async function seedDatabase() {
         category: "Desserts",
         user_id: user.id,
       },
-
-      // Main Dishes
       {
         title: "Grilled Chicken Breast",
         description: "Juicy grilled chicken breast with herbs.",
@@ -96,8 +92,6 @@ async function seedDatabase() {
         category: "Main Dishes",
         user_id: user.id,
       },
-
-      // Vegan
       {
         title: "Vegan Buddha Bowl",
         description: "A healthy and colorful vegan bowl.",
