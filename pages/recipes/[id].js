@@ -38,12 +38,12 @@ export default function RecipeDetail({ recipe }) {
           <div>
             <strong className={styles.metadataLabel}>Prep Time:</strong>
             <br />
-            {recipe.prepTime} mins
+            {recipe.prep_time} mins
           </div>
           <div>
             <strong className={styles.metadataLabel}>Cook Time:</strong>
             <br />
-            {recipe.cookTime} mins
+            {recipe.cook_time} mins
           </div>
           <div>
             <strong className={styles.metadataLabel}>Servings:</strong>

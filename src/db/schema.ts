@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const recipes = pgTable("recipes", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey().notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
   ingredients: text("ingredients").notNull(),

@@ -37,8 +37,8 @@ export default function Home({ recipes = [] }) {
                         {recipe.description}
                       </p>
                       <div className={styles.recipeMetadata}>
-                        <span>Prep: {recipe.prepTime} mins</span>
-                        <span>Cook: {recipe.cookTime} mins</span>
+                        <span>Prep: {recipe.prep_time} mins</span>
+                        <span>Cook: {recipe.cook_time} mins</span>
                         <span>Servings: {recipe.servings}</span>
                       </div>
                       <button className={styles.viewButton}>View Recipe</button>
