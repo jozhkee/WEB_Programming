@@ -15,6 +15,7 @@ export default async function handler(req, res) {
       prepTime,
       cookTime,
       servings,
+      category,
     } = req.body;
 
     // Debug log
@@ -22,10 +23,11 @@ export default async function handler(req, res) {
       prepTime,
       cookTime,
       servings,
+      category,
     });
 
     // Validate required fields and ensure numeric values
-    if (!title || !description || !ingredients || !instructions) {
+    if (!title || !description || !ingredients || !instructions || !category) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -56,6 +58,7 @@ export default async function handler(req, res) {
         prep_time,
         cook_time,
         servings: servings_count,
+        category,
       })
       .returning();
 

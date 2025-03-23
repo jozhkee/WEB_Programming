@@ -10,6 +10,20 @@ export default function AddRecipe() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const categories = [
+    "pasta",
+    "desserts",
+    "main dishes",
+    "vegan",
+    "vegetarian",
+    "salads",
+    "sandwiches",
+    "finger foods",
+    "soups",
+    "breakfast",
+    "drinks",
+  ];
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -27,6 +41,7 @@ export default function AddRecipe() {
     prepTime: "",
     cookTime: "",
     servings: "",
+    category: categories[0], // Default to the first category
   });
 
   const handleIngredientChange = (index, value) => {
@@ -61,6 +76,10 @@ export default function AddRecipe() {
     return null;
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -82,6 +101,7 @@ export default function AddRecipe() {
         },
         body: JSON.stringify({
           ...recipe,
+          category: recipe.category.toLowerCase(), // Store category in lowercase
           ingredients: recipe.ingredients.filter((i) => i.trim()),
           prepTime: parseInt(recipe.prepTime),
           cookTime: parseInt(recipe.cookTime),
@@ -92,13 +112,9 @@ export default function AddRecipe() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Check if data contains a specific error message
-        const errorMessage =
-          data.error || data.message || "Failed to add recipe";
-        throw new Error(errorMessage);
+        throw new Error(data.error || "Failed to add recipe");
       }
 
-      // Success - clear form and redirect
       setRecipe({
         title: "",
         description: "",
@@ -107,16 +123,13 @@ export default function AddRecipe() {
         prepTime: "",
         cookTime: "",
         servings: "",
+        category: categories[0], // Reset to default category
       });
 
-      router.push(`/recipes/${data.id}`); // Redirect to the new recipe page
+      router.push(`/recipes/${data.id}`);
     } catch (error) {
       console.error("Error adding recipe:", error);
-      setError(
-        typeof error === "string"
-          ? error
-          : error.message || "Failed to add recipe"
-      );
+      setError(error.message || "Failed to add recipe");
     } finally {
       setIsSubmitting(false);
     }
@@ -216,6 +229,28 @@ export default function AddRecipe() {
                 required
                 disabled={isSubmitting}
               />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label} htmlFor="category">
+                Category
+              </label>
+              <select
+                className={styles.input}
+                id="category"
+                value={recipe.category}
+                onChange={(e) =>
+                  setRecipe({ ...recipe, category: e.target.value })
+                }
+                required
+                disabled={isSubmitting}
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {capitalizeFirstLetter(category)}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className={styles.timeServingsRow}>

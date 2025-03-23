@@ -3,8 +3,36 @@ import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "../styles/index.module.css";
+import { useState } from "react";
 
 export default function Home({ recipes = [] }) {
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  // Helper function to capitalize the first letter of a string
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  // Filter recipes based on the selected category
+  const filteredRecipes = selectedCategory
+    ? recipes.filter((recipe) => recipe.category === selectedCategory)
+    : recipes;
+
+  const categories = [
+    "All",
+    "Pasta",
+    "Desserts",
+    "Main Dishes",
+    "Vegan",
+    "Vegetarian",
+    "Salads",
+    "Sandwiches",
+    "Finger Foods",
+    "Soups",
+    "Breakfast",
+    "Drinks",
+  ];
+
   return (
     <>
       <Head>
@@ -21,11 +49,33 @@ export default function Home({ recipes = [] }) {
           Share your favorite recipes, discover new dishes, and connect with
           fellow food lovers.
         </p>
+        <section className={styles.filterSection}>
+          <div className={styles.categoryTabs}>
+            {categories.map((category) => (
+              <button
+                key={category}
+                className={`${styles.tabButton} ${
+                  (selectedCategory === "" && category === "All") || // Handle "All" explicitly
+                  selectedCategory === category.toLowerCase()
+                    ? styles.activeTab
+                    : ""
+                }`}
+                onClick={() =>
+                  setSelectedCategory(
+                    category === "All" ? "" : category.toLowerCase()
+                  )
+                }
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </section>
         <section className={styles.featuredSection}>
           <h2 className={styles.sectionTitle}>Featured Recipes</h2>
-          {recipes && recipes.length > 0 ? (
+          {filteredRecipes && filteredRecipes.length > 0 ? (
             <ul className={styles.recipeList}>
-              {recipes.map((recipe) => (
+              {filteredRecipes.map((recipe) => (
                 <li key={recipe.id} className={styles.recipeCard}>
                   <Link
                     href={`/recipes/${recipe.id}`}
@@ -40,6 +90,9 @@ export default function Home({ recipes = [] }) {
                         <span>Prep: {recipe.prep_time} mins</span>
                         <span>Cook: {recipe.cook_time} mins</span>
                         <span>Servings: {recipe.servings}</span>
+                        <span>
+                          Category: {capitalizeFirstLetter(recipe.category)}
+                        </span>
                       </div>
                       <button className={styles.viewButton}>View Recipe</button>
                     </div>
@@ -49,7 +102,7 @@ export default function Home({ recipes = [] }) {
             </ul>
           ) : (
             <p className={styles.noRecipes}>
-              No recipes found. Check back soon!
+              No recipes found for this category. Try another one!
             </p>
           )}
         </section>
