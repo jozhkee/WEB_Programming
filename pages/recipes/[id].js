@@ -79,15 +79,16 @@ export default function RecipeDetail({ recipe }) {
           <div className={styles.contentSection}>
             <h2 className={styles.sectionTitle}>Instructions</h2>
             <div className={styles.instructions}>
-              {recipe.instructions.split(/\d+\./).map((step, index) => {
-                if (index === 0) return null; // Skip first empty element
-                return (
-                  <p key={index} className={styles.instructionStep}>
-                    <strong className={styles.stepNumber}>{index}.</strong>{" "}
-                    {step.trim()}
-                  </p>
-                );
-              })}
+              {recipe.instructions
+                ? recipe.instructions.split(". ").map((step, index) => (
+                    <p key={index} className={styles.instructionStep}>
+                      <strong className={styles.stepNumber}>
+                        {index + 1}.
+                      </strong>{" "}
+                      {step.trim()}.
+                    </p>
+                  ))
+                : "No instructions available"}
             </div>
           </div>
         </div>

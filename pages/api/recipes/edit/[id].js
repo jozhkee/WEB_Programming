@@ -23,8 +23,8 @@ export default async function handler(req, res) {
     const updateData = {
       title: req.body.title,
       description: req.body.description,
-      ingredients: JSON.stringify(req.body.ingredients), 
-      instructions: req.body.instructions.trim(), 
+      ingredients: JSON.stringify(req.body.ingredients),
+      instructions: req.body.instructions.trim(),
       prep_time: parseInt(req.body.prep_time, 10),
       cook_time: parseInt(req.body.cook_time, 10),
       servings: parseInt(req.body.servings, 10),

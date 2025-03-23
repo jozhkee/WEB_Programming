@@ -1,8 +1,23 @@
 import { db } from "../src/";
-import { recipes } from "../src/db/schema";
+import { recipes, users } from "../src/db/schema";
 
 async function seedDatabase() {
   try {
+    // Create a test user
+    const [existingUser] = await db.select().from(users).limit(1);
+    let user = existingUser;
+
+    if (!user) {
+      const [newUser] = await db
+        .insert(users)
+        .values({
+          email: "testuser@example.com",
+          password: "securepassword123", // Hashing is recommended in production
+        })
+        .returning();
+      user = newUser;
+    }
+
     await db.insert(recipes).values([
       // Pasta
       {
@@ -15,6 +30,7 @@ async function seedDatabase() {
         cook_time: 20,
         servings: 4,
         category: "Pasta",
+        user_id: user.id,
       },
       {
         title: "Penne Arrabbiata",
@@ -25,6 +41,7 @@ async function seedDatabase() {
         cook_time: 15,
         servings: 2,
         category: "Pasta",
+        user_id: user.id,
       },
 
       // Desserts
@@ -37,6 +54,7 @@ async function seedDatabase() {
         cook_time: 30,
         servings: 8,
         category: "Desserts",
+        user_id: user.id,
       },
       {
         title: "Apple Pie",
@@ -47,6 +65,36 @@ async function seedDatabase() {
         cook_time: 40,
         servings: 6,
         category: "Desserts",
+        user_id: user.id,
+      },
+
+      // Main Dishes
+      {
+        title: "Grilled Chicken Breast",
+        description: "Juicy grilled chicken breast with herbs.",
+        ingredients: JSON.stringify([
+          "chicken breast",
+          "olive oil",
+          "garlic",
+          "herbs",
+        ]),
+        instructions: "Marinate chicken. Grill until fully cooked.",
+        prep_time: 10,
+        cook_time: 15,
+        servings: 2,
+        category: "Main Dishes",
+        user_id: user.id,
+      },
+      {
+        title: "Beef Stroganoff",
+        description: "Tender beef strips in a creamy mushroom sauce.",
+        ingredients: JSON.stringify(["beef", "mushrooms", "cream", "onions"]),
+        instructions: "Cook beef. Prepare sauce. Combine and serve.",
+        prep_time: 15,
+        cook_time: 25,
+        servings: 4,
+        category: "Main Dishes",
+        user_id: user.id,
       },
 
       // Vegan
@@ -59,6 +107,7 @@ async function seedDatabase() {
         cook_time: 10,
         servings: 1,
         category: "Vegan",
+        user_id: user.id,
       },
       {
         title: "Vegan Tacos",
@@ -69,66 +118,7 @@ async function seedDatabase() {
         cook_time: 15,
         servings: 3,
         category: "Vegan",
-      },
-
-      // Salads
-      {
-        title: "Caesar Salad",
-        description: "Crisp romaine lettuce with Caesar dressing and croutons.",
-        ingredients: JSON.stringify([
-          "romaine lettuce",
-          "croutons",
-          "parmesan",
-          "Caesar dressing",
-        ]),
-        instructions: "Toss ingredients together and serve.",
-        prep_time: 10,
-        cook_time: 0,
-        servings: 2,
-        category: "Salads",
-      },
-      {
-        title: "Greek Salad",
-        description: "A refreshing salad with cucumbers, tomatoes, and feta.",
-        ingredients: JSON.stringify([
-          "cucumbers",
-          "tomatoes",
-          "feta cheese",
-          "olives",
-        ]),
-        instructions: "Chop vegetables. Toss with feta and olives.",
-        prep_time: 10,
-        cook_time: 0,
-        servings: 4,
-        category: "Salads",
-      },
-
-      // Sandwiches
-      {
-        title: "Grilled Cheese Sandwich",
-        description: "A classic grilled cheese sandwich.",
-        ingredients: JSON.stringify(["bread", "cheese", "butter"]),
-        instructions: "Butter bread, add cheese, and grill until golden brown.",
-        prep_time: 5,
-        cook_time: 5,
-        servings: 1,
-        category: "Sandwiches",
-      },
-      {
-        title: "Club Sandwich",
-        description: "A triple-layer sandwich with turkey, bacon, and lettuce.",
-        ingredients: JSON.stringify([
-          "bread",
-          "turkey",
-          "bacon",
-          "lettuce",
-          "tomato",
-        ]),
-        instructions: "Layer ingredients between slices of bread.",
-        prep_time: 10,
-        cook_time: 0,
-        servings: 2,
-        category: "Sandwiches",
+        user_id: user.id,
       },
     ]);
 
