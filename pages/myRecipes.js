@@ -8,6 +8,11 @@ export default function MyRecipes() {
   const [recipes, setRecipes] = useState([]);
   const [error, setError] = useState("");
 
+  // Helper function to capitalize the first letter of a string
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -57,16 +62,17 @@ export default function MyRecipes() {
                   </p>
                   <div className={styles.recipeMetadata}>
                     <p className={styles.recipeDetails}>
-                      <strong>Prep Time:</strong> {recipe.prepTime} mins
+                      <strong>Prep Time:</strong> {recipe.prep_time} mins
                     </p>
                     <p className={styles.recipeDetails}>
-                      <strong>Cook Time:</strong> {recipe.cookTime} mins
+                      <strong>Cook Time:</strong> {recipe.cook_time} mins
                     </p>
                     <p className={styles.recipeDetails}>
                       <strong>Servings:</strong> {recipe.servings}
                     </p>
                     <p className={styles.recipeDetails}>
-                      <strong>Category:</strong> {recipe.category}
+                      <strong>Category:</strong>{" "}
+                      {capitalizeFirstLetter(recipe.category)}
                     </p>
                   </div>
                   <Link
