@@ -25,19 +25,22 @@
 }
 
 .recipeList {
-  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px; /* Increased spacing between items */
   padding: 0;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .recipeCard {
-  margin: 20px auto;
   padding: 20px;
   background: #1e1e1e;
   border: 1px solid #333;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  max-width: 800px;
 }
 
 .recipeCard:hover {

@@ -29,7 +29,7 @@ async function seedDatabase() {
         prep_time: 10,
         cook_time: 20,
         servings: 4,
-        category: "Pasta",
+        category: "pasta",
         user_id: user.id,
       },
       {
@@ -40,7 +40,7 @@ async function seedDatabase() {
         prep_time: 15,
         cook_time: 15,
         servings: 2,
-        category: "Pasta",
+        category: "pasta",
         user_id: user.id,
       },
       {
@@ -51,7 +51,7 @@ async function seedDatabase() {
         prep_time: 15,
         cook_time: 30,
         servings: 8,
-        category: "Desserts",
+        category: "desserts",
         user_id: user.id,
       },
       {
@@ -62,7 +62,7 @@ async function seedDatabase() {
         prep_time: 20,
         cook_time: 40,
         servings: 6,
-        category: "Desserts",
+        category: "desserts",
         user_id: user.id,
       },
       {
@@ -78,7 +78,7 @@ async function seedDatabase() {
         prep_time: 10,
         cook_time: 15,
         servings: 2,
-        category: "Main Dishes",
+        category: "main dishes",
         user_id: user.id,
       },
       {
@@ -89,7 +89,7 @@ async function seedDatabase() {
         prep_time: 15,
         cook_time: 25,
         servings: 4,
-        category: "Main Dishes",
+        category: "main dishes",
         user_id: user.id,
       },
       {
@@ -100,7 +100,7 @@ async function seedDatabase() {
         prep_time: 15,
         cook_time: 10,
         servings: 1,
-        category: "Vegan",
+        category: "vegan",
         user_id: user.id,
       },
       {
@@ -111,7 +111,7 @@ async function seedDatabase() {
         prep_time: 20,
         cook_time: 15,
         servings: 3,
-        category: "Vegan",
+        category: "vegan",
         user_id: user.id,
       },
     ]);
