@@ -13,6 +13,11 @@ export default function RecipeDetail({ recipe }) {
     return <div className={styles.loadingMessage}>Loading...</div>;
   }
 
+  // Helper function to capitalize the first letter of a string
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
   // Handle ingredients based on whether it's a string or already an object
   const ingredients =
     typeof recipe.ingredients === "string"
@@ -49,6 +54,11 @@ export default function RecipeDetail({ recipe }) {
             <strong className={styles.metadataLabel}>Servings:</strong>
             <br />
             {recipe.servings}
+          </div>
+          <div>
+            <strong className={styles.metadataLabel}>Category:</strong>
+            <br />
+            {capitalizeFirstLetter(recipe.category) || "Unknown"}
           </div>
         </div>
 
