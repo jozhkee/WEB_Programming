@@ -6,7 +6,8 @@ import { users } from "../../../src/db/schema";
 
 // JWT configuration
 const JWT_SECRET =
-  process.env.JWT_SECRET || "your-secret-key-change-this-in-production";
+  process.env.JWT_SECRET ||
+  "91f13ecaa38a54734ab74a9025a5dfa7926b80d08e4d6b1cd699758e2b46c6847b7cd9b861575aa0449e5718929548d169e49d7f7bff9f201d8795bb2cab5a8a";
 const JWT_EXPIRES_IN = "24h";
 
 /**
@@ -21,6 +22,7 @@ export const authUtils = {
       {
         userId: user.id,
         email: user.email,
+        username: user.username,
       },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
@@ -66,6 +68,18 @@ export const authUtils = {
   },
 
   /**
+   * Check if user exists by username
+   */
+  async getUserByUsername(username) {
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, username))
+      .limit(1);
+    return user.length > 0 ? user[0] : null;
+  },
+
+  /**
    * Authenticate request middleware for API routes
    */
   async authenticateRequest(req, res) {
@@ -86,16 +100,3 @@ export const authUtils = {
     }
   },
 };
-
-// Export a default function for Next.js API routes that need authentication
-export default async function withAuth(req, res, handler) {
-  const auth = await authUtils.authenticateRequest(req, res);
-
-  if (!auth.authenticated) {
-    return res.status(401).json({ message: auth.error });
-  }
-
-  // Add user to request and proceed
-  req.user = auth.user;
-  return handler(req, res);
-}

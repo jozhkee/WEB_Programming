@@ -6,6 +6,7 @@ import styles from "../styles/header.module.css";
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
 
@@ -14,8 +15,12 @@ export default function Header() {
     if (token) {
       setIsLoggedIn(true);
       const storedEmail = localStorage.getItem("userEmail");
+      const storedUsername = localStorage.getItem("username");
       if (storedEmail) {
         setUserEmail(storedEmail);
+      }
+      if (storedUsername) {
+        setUsername(storedUsername);
       }
     }
   }, []);
@@ -37,6 +42,7 @@ export default function Header() {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userEmail");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
     setIsDropdownOpen(false);
     router.push("/");
@@ -60,7 +66,7 @@ export default function Header() {
                 className={`${styles.button} ${styles.userDropdownButton}`}
                 onClick={toggleDropdown}
               >
-                {userEmail} {isDropdownOpen ? "▲" : "▼"}
+                {username || userEmail} {isDropdownOpen ? "▲" : "▼"}
               </button>
               {isDropdownOpen && (
                 <div className={styles.dropdownContent}>

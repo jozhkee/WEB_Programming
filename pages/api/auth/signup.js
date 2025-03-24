@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
 
     // Basic validation
     if (!email || !password) {
@@ -18,11 +18,22 @@ export default async function handler(req, res) {
         .json({ message: "Email and password are required" });
     }
 
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+
     // Check if user already exists
     const existingUser = await authUtils.getUserByEmail(email);
 
     if (existingUser) {
       return res.status(409).json({ message: "User already exists" });
+    }
+
+    // Check if username is already taken
+    const existingUsername = await authUtils.getUserByUsername(username);
+
+    if (existingUsername) {
+      return res.status(409).json({ message: "Username already taken" });
     }
 
     // Hash password
@@ -33,6 +44,7 @@ export default async function handler(req, res) {
       // Insert using the schema fields you actually have
       await db.insert(users).values({
         email: email,
+        username: username,
         password: hashedPassword,
       });
 

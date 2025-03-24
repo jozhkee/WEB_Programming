@@ -5,6 +5,7 @@ import styles from "../styles/signup.module.css";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // Add username state
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -24,19 +25,26 @@ export default function Signup() {
       return;
     }
 
+    // Validate username
+    if (!username || username.trim() === "") {
+      setError("Username is required.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, username, password }),
       });
       const data = await response.json();
       if (response.ok) {
-        // Store the authentication token and email
+        // Store the authentication token, email and username
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("username", username);
 
         // Redirect to the index page
         router.push("/");
@@ -61,6 +69,14 @@ export default function Signup() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            className={styles["form-control-dark"]}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <input
