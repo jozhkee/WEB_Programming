@@ -1,125 +1,27 @@
-import { db } from "../src/";
-import { recipes, users } from "../src/db/schema";
+import { seedUsers } from "./seedUser";
+import { seedRecipes } from "./seedRecipes";
+import { seedComments } from "./seedComments";
 
-async function seedDatabase() {
+async function seedAll() {
   try {
-    // Insert a user and retrieve the created user ID
-    const [user] = await db
-      .insert(users)
-      .values([
-        {
-          email: "admin@example.com",
-          password: "securepassword", // Hash in real apps!
-        },
-      ])
-      .returning({ id: users.id }); // Only return the user ID
+    console.log("Starting complete database seeding...");
 
-    if (!user) {
-      throw new Error("Failed to create user.");
-    }
+    // Seed in sequence to maintain proper relationships
+    console.log("Step 1: Seeding users");
+    await seedUsers();
 
-    // Insert recipes with the created user ID
-    await db.insert(recipes).values([
-      {
-        title: "Spaghetti Carbonara",
-        description:
-          "A classic Italian pasta dish with eggs, cheese, and bacon.",
-        ingredients: JSON.stringify(["spaghetti", "eggs", "cheese", "bacon"]),
-        instructions: "Cook pasta. Mix eggs and cheese. Combine with bacon.",
-        prep_time: 10,
-        cook_time: 20,
-        servings: 4,
-        category: "pasta",
-        user_id: user.id,
-      },
-      {
-        title: "Penne Arrabbiata",
-        description: "Spicy tomato-based pasta dish.",
-        ingredients: JSON.stringify(["penne", "tomato sauce", "chili flakes"]),
-        instructions: "Cook pasta. Prepare sauce. Mix together.",
-        prep_time: 15,
-        cook_time: 15,
-        servings: 2,
-        category: "pasta",
-        user_id: user.id,
-      },
-      {
-        title: "Chocolate Cake",
-        description: "Rich and moist chocolate cake.",
-        ingredients: JSON.stringify(["flour", "cocoa powder", "sugar", "eggs"]),
-        instructions: "Mix ingredients. Bake at 180°C for 30 minutes.",
-        prep_time: 15,
-        cook_time: 30,
-        servings: 8,
-        category: "desserts",
-        user_id: user.id,
-      },
-      {
-        title: "Apple Pie",
-        description: "Classic apple pie with a flaky crust.",
-        ingredients: JSON.stringify(["apples", "flour", "butter", "sugar"]),
-        instructions: "Prepare crust. Fill with apples. Bake until golden.",
-        prep_time: 20,
-        cook_time: 40,
-        servings: 6,
-        category: "desserts",
-        user_id: user.id,
-      },
-      {
-        title: "Grilled Chicken Breast",
-        description: "Juicy grilled chicken breast with herbs.",
-        ingredients: JSON.stringify([
-          "chicken breast",
-          "olive oil",
-          "garlic",
-          "herbs",
-        ]),
-        instructions: "Marinate chicken. Grill until fully cooked.",
-        prep_time: 10,
-        cook_time: 15,
-        servings: 2,
-        category: "main dishes",
-        user_id: user.id,
-      },
-      {
-        title: "Beef Stroganoff",
-        description: "Tender beef strips in a creamy mushroom sauce.",
-        ingredients: JSON.stringify(["beef", "mushrooms", "cream", "onions"]),
-        instructions: "Cook beef. Prepare sauce. Combine and serve.",
-        prep_time: 15,
-        cook_time: 25,
-        servings: 4,
-        category: "main dishes",
-        user_id: user.id,
-      },
-      {
-        title: "Vegan Buddha Bowl",
-        description: "A healthy and colorful vegan bowl.",
-        ingredients: JSON.stringify(["quinoa", "chickpeas", "vegetables"]),
-        instructions: "Cook quinoa. Assemble with chickpeas and vegetables.",
-        prep_time: 15,
-        cook_time: 10,
-        servings: 1,
-        category: "vegan",
-        user_id: user.id,
-      },
-      {
-        title: "Vegan Tacos",
-        description: "Tacos filled with spiced lentils and fresh veggies.",
-        ingredients: JSON.stringify(["tortillas", "lentils", "vegetables"]),
-        instructions: "Cook lentils. Assemble tacos with veggies.",
-        prep_time: 20,
-        cook_time: 15,
-        servings: 3,
-        category: "vegan",
-        user_id: user.id,
-      },
-    ]);
+    console.log("Step 2: Seeding recipes");
+    await seedRecipes();
 
-    console.log("Database seeded successfully!");
+    console.log("Step 3: Seeding comments");
+    await seedComments();
+
+    console.log("All data seeded successfully!");
   } catch (error) {
-    console.error("Error seeding database:", error);
+    console.error("Error during database seeding:", error);
   }
 }
 
-seedDatabase();
+seedAll()
+  .then(() => process.exit(0))
+  .catch(() => process.exit(1));

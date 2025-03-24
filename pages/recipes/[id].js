@@ -81,14 +81,14 @@ export default function RecipeDetail({ recipe }) {
             <h2 className={styles.sectionTitle}>Instructions</h2>
             <div className={styles.instructions}>
               {recipe.instructions
-                ? recipe.instructions.split(". ").map((step, index) => (
-                    <p key={index} className={styles.instructionStep}>
-                      <strong className={styles.stepNumber}>
-                        {index + 1}.
-                      </strong>{" "}
-                      {step.trim()}.
-                    </p>
-                  ))
+                ? recipe.instructions
+                    .split(/\d+\.\s+/)
+                    .filter(Boolean)
+                    .map((step, index) => (
+                      <p key={index} className={styles.instructionStep}>
+                        {index + 1}. {step.trim()}
+                      </p>
+                    ))
                 : "No instructions available"}
             </div>
           </div>
