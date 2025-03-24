@@ -5,6 +5,7 @@ import {
   serial,
   jsonb,
   varchar,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const recipes = pgTable("recipes", {
@@ -24,4 +25,14 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
+});
+
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  recipe_id: integer("recipe_id").notNull(),
+  user_id: integer("user_id").notNull(),
+  content: text("content").notNull(),
+  author_name: text("author_name").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
 });

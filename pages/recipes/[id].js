@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Comments from "../../components/Comments";
 import styles from "../../styles/recipeDetail.module.css";
 
 export default function RecipeDetail({ recipe }) {
@@ -91,6 +92,10 @@ export default function RecipeDetail({ recipe }) {
                 : "No instructions available"}
             </div>
           </div>
+        </div>
+
+        <div className={styles.commentsSection}>
+          <Comments recipeId={recipe.id} />
         </div>
       </main>
       <Footer />
