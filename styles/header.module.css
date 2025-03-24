@@ -10,6 +10,20 @@
   align-items: center;
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  gap: 10px;
+  color: white;
+}
+
+.logo {
+  border-radius: 50%;
+  object-fit: contain;
+}
+
 .title {
   margin: 0;
   font-size: 24px;
@@ -21,6 +35,13 @@
 .title:visited,
 .title:hover,
 .title:active {
+  color: white;
+  text-decoration: none;
+}
+
+.titleContainer:visited,
+.titleContainer:hover,
+.titleContainer:active {
   color: white;
   text-decoration: none;
 }
@@ -125,4 +146,9 @@
 .dropdownItem:hover {
   background-color: #f0f0f0;
   color: #007bff;
+}
+
+/* Add a new style for the Link component */
+.header a {
+  text-decoration: none;
 }

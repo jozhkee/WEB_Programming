@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "../styles/header.module.css";
 
 export default function Header() {
@@ -54,8 +55,17 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <Link href="/" passHref legacyBehavior>
-        <a className={styles.title}>RecipeHub</a>
+      <Link href="/">
+        <div className={styles.titleContainer}>
+          <img
+            src="/images/logo.png"
+            alt="RecipeHub Logo"
+            width={40}
+            height={40}
+            className={styles.logo}
+          />
+          <span className={styles.title}>RecipeHub</span>
+        </div>
       </Link>
 
       <div className={styles.authButtons}>
