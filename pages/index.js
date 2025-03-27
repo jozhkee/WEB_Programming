@@ -7,6 +7,8 @@ import { useState } from "react";
 
 export default function Home({ recipes = [] }) {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Helper function to capitalize the first letter of a string
   const capitalizeFirstLetter = (string) => {
@@ -34,13 +36,14 @@ export default function Home({ recipes = [] }) {
   ];
 
   return (
-    <>
+    <div className={styles.container}>
       <Head>
-        <title>RecipeHub</title>
+        <title>Recipe App</title>
         <meta
           name="description"
-          content="A community-driven recipe sharing forum"
+          content="Find and save your favorite recipes"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
       <main className={styles.mainContainer}>
@@ -73,7 +76,11 @@ export default function Home({ recipes = [] }) {
         </section>
         <section className={styles.featuredSection}>
           <h2 className={styles.sectionTitle}>Featured Recipes</h2>
-          {filteredRecipes && filteredRecipes.length > 0 ? (
+          {loading ? (
+            <p>Loading recipes...</p>
+          ) : error ? (
+            <div className={styles.error}>{error}</div>
+          ) : filteredRecipes.length > 0 ? (
             <ul className={styles.recipeList}>
               {filteredRecipes.map((recipe) => (
                 <li key={recipe.id} className={styles.recipeCard}>
@@ -101,14 +108,14 @@ export default function Home({ recipes = [] }) {
               ))}
             </ul>
           ) : (
-            <p className={styles.noRecipes}>
-              No recipes found for this category. Try another one!
-            </p>
+            <div className={styles.noRecipes}>
+              No recipes found in this category.
+            </div>
           )}
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

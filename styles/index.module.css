@@ -1,4 +1,11 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .mainContainer {
+  flex: 1;
   padding: 20px;
   text-align: center;
 }

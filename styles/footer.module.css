@@ -3,10 +3,9 @@
   color: white;
   text-align: center;
   padding: 15px;
-  margin-top: 40px;
   width: 100%;
-  max-width: 100vw;
   font-size: 14px;
   overflow: hidden;
-  position: relative;
+  margin-top: auto;
+  flex-shrink: 0;
 }
