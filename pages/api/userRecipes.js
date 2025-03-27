@@ -1,6 +1,6 @@
 import { db } from "../../src";
 import { recipes } from "../../src/db/schema";
-import { eq } from "drizzle-orm"; // Import the `eq` function for filtering
+import { eq } from "drizzle-orm";
 import { getUserFromToken } from "../../lib/auth";
 
 export default async function handler(req, res) {
@@ -21,12 +21,12 @@ export default async function handler(req, res) {
     const userRecipes = await db
       .select()
       .from(recipes)
-      .where(eq(recipes.user_id, user.userId)); // Use `eq` for filtering
+      .where(eq(recipes.user_id, user.userId));
 
     console.log("Fetched recipes:", userRecipes); // Debug log
 
     if (!userRecipes || userRecipes.length === 0) {
-      return res.status(200).json([]); // Return an empty array if no recipes are found
+      return res.status(200).json([]);
     }
 
     res.status(200).json(userRecipes);

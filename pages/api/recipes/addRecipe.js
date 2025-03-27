@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         cook_time,
         servings: servings_count,
         category,
-        user_id: user.userId, // Use user.userId instead of user.id
+        user_id: user.userId,
       })
       .returning();
 

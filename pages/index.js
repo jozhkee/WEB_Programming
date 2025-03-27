@@ -55,7 +55,7 @@ export default function Home({ recipes = [] }) {
               <button
                 key={category}
                 className={`${styles.tabButton} ${
-                  (selectedCategory === "" && category === "All") || // Handle "All" explicitly
+                  (selectedCategory === "" && category === "All") ||
                   selectedCategory === category.toLowerCase()
                     ? styles.activeTab
                     : ""

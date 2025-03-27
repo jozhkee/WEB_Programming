@@ -1,15 +1,13 @@
-/* Keep the container at the top of the page */
 .form-container {
   width: 100%;
-  max-width: 400px; /* Limit the width of the form */
-  margin: 20px auto 0 auto; /* Add some margin at the top, but keep it centered horizontally */
+  max-width: 400px;
+  margin: 20px auto 0 auto;
   padding: 20px;
-  background-color: #1e1e1e; /* Apply background color to the container */
+  background-color: #1e1e1e;
   border-radius: 8px;
   box-sizing: border-box;
 }
 
-/* Heading style */
 .heading {
   text-align: center;
   font-size: 2rem;
@@ -41,7 +39,7 @@
   color: white;
   font-size: 16px;
   border-radius: 8px;
-  width: 100%; /* Ensure the button takes full width of the container */
+  width: 100%;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -55,7 +53,6 @@
   cursor: not-allowed;
 }
 
-/* Error message style */
 .error-message {
   color: #f44336;
   font-size: 0.9rem;
@@ -63,7 +60,6 @@
   text-align: center;
 }
 
-/* Link style */
 .link {
   display: block;
   text-align: center;

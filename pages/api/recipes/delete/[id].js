@@ -22,7 +22,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid recipe ID" });
     }
 
-    // First check if the recipe exists and belongs to the user
     const recipeToDelete = await db
       .select()
       .from(recipes)
@@ -35,7 +34,6 @@ export default async function handler(req, res) {
         .json({ error: "Recipe not found or unauthorized" });
     }
 
-    // Delete the recipe
     const deletedRecipe = await db
       .delete(recipes)
       .where(eq(recipes.id, recipeId))

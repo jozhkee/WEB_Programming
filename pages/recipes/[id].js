@@ -9,7 +9,6 @@ import styles from "../../styles/recipeDetail.module.css";
 export default function RecipeDetail({ recipe }) {
   const router = useRouter();
 
-  // Show loading state if fallback
   if (router.isFallback) {
     return <div className={styles.loadingMessage}>Loading...</div>;
   }

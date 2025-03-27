@@ -10,7 +10,7 @@ const getUserFromToken = async (token) => {
       .select({
         id: users.id,
         email: users.email,
-        username: users.username, // Added username to selection
+        username: users.username,
       })
       .from(users)
       .where(eq(users.id, decoded.userId));
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
           recipe_id: parseInt(recipe_id),
           user_id: user.id,
           content: content.trim(),
-          author_name: user.username, // Now using username instead of email
+          author_name: user.username,
           created_at: new Date(),
           updated_at: new Date(),
         })

@@ -1,5 +1,3 @@
-// api/recipes/[id].js
-
 import { db } from "../../../src";
 import { recipes } from "../../../src/db/schema";
 import { eq } from "drizzle-orm";

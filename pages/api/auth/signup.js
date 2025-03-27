@@ -39,9 +39,7 @@ export default async function handler(req, res) {
     // Hash password
     const hashedPassword = await authUtils.hashPassword(password);
 
-    // Create new user in database - match your schema exactly
     try {
-      // Insert using the schema fields you actually have
       await db.insert(users).values({
         email: email,
         username: username,
@@ -58,7 +56,6 @@ export default async function handler(req, res) {
       // Generate JWT token
       const token = authUtils.generateToken(newUser);
 
-      // Return user data and token (omitting password)
       const { password: _, ...userWithoutPassword } = newUser;
 
       return res.status(201).json({

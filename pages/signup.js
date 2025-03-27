@@ -5,7 +5,7 @@ import styles from "../styles/signup.module.css";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState(""); // Add username state
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();

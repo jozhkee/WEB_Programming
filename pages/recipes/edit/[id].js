@@ -63,7 +63,6 @@ export default function EditRecipe() {
 
           const data = await res.json();
 
-          // Convert ingredients string to array if necessary
           const ingredientsArray = Array.isArray(data.ingredients)
             ? data.ingredients
             : typeof data.ingredients === "string"
@@ -75,7 +74,6 @@ export default function EditRecipe() {
             description: data.description || "",
             ingredients: ingredientsArray.length ? ingredientsArray : [""],
             instructions: data.instructions || "",
-            // Handle potential different naming between back-end and front-end
             prepTime: data.prep_time || data.prepTime || "",
             cookTime: data.cook_time || data.cookTime || "",
             servings: data.servings || "",
