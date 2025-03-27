@@ -174,6 +174,38 @@ export default function EditRecipe() {
     }
   };
 
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this recipe? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`/api/recipes/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to delete recipe");
+      }
+
+      router.push("/myRecipes");
+    } catch (error) {
+      console.error("Error deleting recipe:", error);
+      setError(error.message || "Failed to delete recipe");
+      setIsSubmitting(false);
+    }
+  };
+
   if (!isLoggedIn) {
     return null;
   }
@@ -358,14 +390,23 @@ export default function EditRecipe() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              a
-              className={styles.submitButton}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Saving Changes..." : "Save Changes"}
-            </button>
+            <div className={styles.buttonGroup}>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Saving Changes..." : "Save Changes"}
+              </button>
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={handleDelete}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Deleting..." : "Delete Recipe"}
+              </button>
+            </div>
           </form>
         </div>
       </main>
