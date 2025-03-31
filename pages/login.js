@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Header from "../components/Header";
-import styles from "../styles/login.module.css";
+import Footer from "../components/Footer";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -54,36 +55,65 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className="min-vh-100 d-flex flex-column">
       <Header />
-      <div className={styles["form-container"]}>
-        <h1 className={styles.heading}>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            className={styles["form-control-dark"]}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className={styles["form-control-dark"]}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <p className={styles["error-message"]}>{error}</p>}
-          <button type="submit" className={styles.button}>
-            Login
-          </button>
-        </form>
-        <a href="/signup" className={styles["link"]}>
-          Don't have an account? Sign up
-        </a>
-      </div>
+      <main className="flex-grow-1 container py-5">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="card bg-dark text-white">
+              <div className="card-body p-4">
+                <h1 className="text-center mb-4">Login</h1>
+
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-control bg-dark text-white"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      className="form-control bg-dark text-white"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-100">
+                    Login
+                  </button>
+                </form>
+
+                <div className="text-center mt-3">
+                  <p className="mb-0">
+                    Don't have an account?{" "}
+                    <Link href="/signup" className="text-primary">
+                      Sign Up
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

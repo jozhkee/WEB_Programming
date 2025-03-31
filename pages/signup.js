@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Header from "../components/Header";
-import styles from "../styles/signup.module.css";
+import Footer from "../components/Footer";
 
 export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -25,9 +27,15 @@ export default function Signup() {
       return;
     }
 
-    // Validate username
-    if (!username || username.trim() === "") {
-      setError("Username is required.");
+    // Validate password match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // Validate password strength
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
       return;
     }
 
@@ -37,17 +45,13 @@ export default function Signup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({ name, email, password }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        // Store the authentication token, email and username
-        localStorage.setItem("authToken", data.token);
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("username", username);
 
-        // Redirect to the index page
-        router.push("/");
+      const data = await response.json();
+
+      if (response.ok) {
+        router.push("/login?registered=true");
       } else {
         setError(data.message || "Signup failed. Please try again.");
       }
@@ -58,44 +62,93 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <div className="min-vh-100 d-flex flex-column">
       <Header />
-      <div className={styles["form-container"]}>
-        <h1 className={styles.heading}>Sign Up</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            className={styles["form-control-dark"]}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className={styles["form-control-dark"]}
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            className={styles["form-control-dark"]}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <p className={styles["error-message"]}>{error}</p>}
-          <button type="submit" className={styles.button}>
-            Sign Up
-          </button>
-        </form>
-        <a href="/login" className={styles.link}>
-          Already have an account? Login
-        </a>
-      </div>
+      <main className="flex-grow-1 container py-5">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="card bg-dark text-white">
+              <div className="card-body p-4">
+                <h1 className="text-center mb-4">Sign Up</h1>
+
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="name" className="form-label">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      className="form-control bg-dark text-white"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-control bg-dark text-white"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      className="form-control bg-dark text-white"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="confirmPassword" className="form-label">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      className="form-control bg-dark text-white"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-100">
+                    Create Account
+                  </button>
+                </form>
+
+                <div className="text-center mt-3">
+                  <p className="mb-0">
+                    Already have an account?{" "}
+                    <Link href="/login" className="text-primary">
+                      Login
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

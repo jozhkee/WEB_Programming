@@ -1,6 +1,73 @@
+:root {
+  --background-primary: #1a1a1a;
+  --background-secondary: #2d2d2d;
+  --background-input: #333333;
+  --border-color: #404040;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --font-family: "Poppins", sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.form-control {
+  background-color: var(--background-input);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.form-control:focus {
+  background-color: var(--background-input);
+  color: var (--text-primary);
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-outline-primary {
+  color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.card {
+  background-color: var(--background-secondary);
+  border-color: var(--border-color);
+}
+
+.navbar-dark {
+  background-color: #212529 !important;
+}
+
+.dropdown-menu {
+  background-color: var(--background-secondary);
+  border-color: var(--border-color);
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+  background-color: var(--background-input);
+  color: var(--text-primary);
+}
+
 .form-control-dark {
   border-color: var(--bs-gray);
 }
+
 .form-control-dark:focus {
   border-color: #fff;
   box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
@@ -12,22 +79,4 @@
 
 .dropdown-toggle:not(:focus) {
   outline: 0;
-}
-
-:root {
-  --background-primary: #1a1a1a;
-  --background-secondary: #2d2d2d;
-  --background-input: #333333;
-  --border-color: #404040;
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: var(--background-primary);
-  color: var(--text-primary);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
 }

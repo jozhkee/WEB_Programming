@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../styles/header.module.css";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,90 +24,76 @@ export default function Header() {
     }
   }, []);
 
-  useEffect(() => {
-    // Close dropdown when clicking outside
-    const handleClickOutside = (event) => {
-      if (isDropdownOpen && !event.target.closest(`.${styles.dropdown}`)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isDropdownOpen]);
-
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("username");
     setIsLoggedIn(false);
-    setIsDropdownOpen(false);
     router.push("/");
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   return (
-    <header className={styles.header}>
-      <Link href="/">
-        <div className={styles.titleContainer}>
-          <img
-            src="/images/logo.png"
-            alt="RecipeHub Logo"
-            width={40}
-            height={40}
-            className={styles.logo}
-          />
-          <span className={styles.title}>RecipeHub</span>
-        </div>
-      </Link>
+    <header className="navbar navbar-dark bg-dark p-3">
+      <div className="container-fluid">
+        <Link href="/" className="text-decoration-none">
+          <div className="d-flex align-items-center">
+            <img
+              src="/images/logo.png"
+              alt="RecipeHub Logo"
+              width={40}
+              height={40}
+              className="rounded-circle me-2"
+            />
+            <span className="navbar-brand mb-0 h1 fw-bold">RecipeHub</span>
+          </div>
+        </Link>
 
-      <div className={styles.authButtons}>
-        {isLoggedIn ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className={styles.dropdown}>
+        <div className="d-flex">
+          {isLoggedIn ? (
+            <div className="dropdown">
               <button
-                className={`${styles.button} ${styles.userDropdownButton}`}
-                onClick={toggleDropdown}
+                className="btn btn-primary dropdown-toggle"
+                type="button"
+                id="userDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
-                {username || userEmail} {isDropdownOpen ? "▲" : "▼"}
+                <span className="fw-bold">{username || userEmail}</span>
               </button>
-              {isDropdownOpen && (
-                <div className={styles.dropdownContent}>
-                  <Link href="/addRecipe">
-                    <button className={styles.dropdownItem}>Add Recipe</button>
+              <ul
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="userDropdown"
+              >
+                <li>
+                  <Link href="/addRecipe" className="dropdown-item">
+                    Add Recipe
                   </Link>
-                  <Link href="/myRecipes">
-                    <button className={styles.dropdownItem}>My Recipes</button>
+                </li>
+                <li>
+                  <Link href="/myRecipes" className="dropdown-item">
+                    My Recipes
                   </Link>
-                  <button
-                    onClick={handleLogout}
-                    className={styles.dropdownItem}
-                  >
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="dropdown-item">
                     Logout
                   </button>
-                </div>
-              )}
+                </li>
+              </ul>
             </div>
-          </div>
-        ) : (
-          <>
-            <Link href="/login">
-              <button className={`${styles.button} ${styles.login}`}>
-                Login
-              </button>
-            </Link>
-            <Link href="/signup">
-              <button className={`${styles.button} ${styles.signup}`}>
-                Sign-up
-              </button>
-            </Link>
-          </>
-        )}
+          ) : (
+            <>
+              <Link href="/login" className="me-2">
+                <button className="btn btn-outline-primary fw-bold">
+                  Login
+                </button>
+              </Link>
+              <Link href="/signup">
+                <button className="btn btn-primary fw-bold">Sign-up</button>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
