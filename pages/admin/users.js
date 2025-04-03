@@ -11,6 +11,8 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -116,6 +118,27 @@ export default function AdminUsers() {
     }
   };
 
+  const handleSort = (field) => {
+    const newDirection =
+      sortField === field && sortDirection === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortDirection(newDirection);
+  };
+
+  const sortedUsers = [...users].sort((a, b) => {
+    let comparison = 0;
+    if (sortField === "id") {
+      comparison = a.id - b.id;
+    } else if (sortField === "username") {
+      comparison = a.username.localeCompare(b.username);
+    } else if (sortField === "email") {
+      comparison = a.email.localeCompare(b.email);
+    } else if (sortField === "is_admin") {
+      comparison = a.is_admin === b.is_admin ? 0 : a.is_admin ? 1 : -1;
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
   if (isLoading) {
     return (
       <div className="d-flex flex-column min-vh-100">
@@ -154,15 +177,42 @@ export default function AdminUsers() {
           <table className="table table-dark table-striped">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Admin Status</th>
+                <th
+                  onClick={() => handleSort("id")}
+                  style={{ cursor: "pointer" }}
+                >
+                  ID{" "}
+                  {sortField === "id" && (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("username")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Username{" "}
+                  {sortField === "username" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("email")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Email{" "}
+                  {sortField === "email" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("is_admin")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Admin Status{" "}
+                  {sortField === "is_admin" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {sortedUsers.map((user) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.username}</td>
@@ -187,12 +237,6 @@ export default function AdminUsers() {
                     </div>
                   </td>
                   <td>
-                    <Link
-                      href={`/admin/users/${user.id}`}
-                      className="btn btn-sm btn-info me-2"
-                    >
-                      View
-                    </Link>
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDeleteUser(user.id)}

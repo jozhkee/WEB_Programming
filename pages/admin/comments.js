@@ -11,6 +11,8 @@ export default function AdminComments() {
   const [comments, setComments] = useState([]);
   const [error, setError] = useState("");
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -66,11 +68,7 @@ export default function AdminComments() {
   };
 
   const handleDeleteComment = async (commentId) => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this comment? This action cannot be undone."
-      )
-    ) {
+    if (!confirm("Are you sure you want to delete this comment?")) {
       return;
     }
 
@@ -88,22 +86,40 @@ export default function AdminComments() {
       }
 
       setDeleteMessage("Comment deleted successfully");
-      // Refresh the comment list
       fetchComments(localStorage.getItem("authToken"));
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Format date for display
+  const handleSort = (field) => {
+    const newDirection =
+      sortField === field && sortDirection === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortDirection(newDirection);
+  };
+
+  const sortedComments = [...comments].sort((a, b) => {
+    let comparison = 0;
+    if (sortField === "id") {
+      comparison = a.id - b.id;
+    } else if (sortField === "author") {
+      comparison = a.author_name.localeCompare(b.author_name);
+    } else if (sortField === "content") {
+      comparison = a.content.localeCompare(b.content);
+    } else if (sortField === "recipe") {
+      comparison = a.recipe_id - b.recipe_id;
+    } else if (sortField === "date") {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      comparison = dateA - dateB;
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
 
   if (isLoading) {
@@ -144,16 +160,50 @@ export default function AdminComments() {
           <table className="table table-dark table-striped">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Author</th>
-                <th>Content</th>
-                <th>Recipe</th>
-                <th>Date</th>
+                <th
+                  onClick={() => handleSort("id")}
+                  style={{ cursor: "pointer" }}
+                >
+                  ID{" "}
+                  {sortField === "id" && (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("author")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Author{" "}
+                  {sortField === "author" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("content")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Content{" "}
+                  {sortField === "content" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("recipe")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Recipe{" "}
+                  {sortField === "recipe" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("date")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Date{" "}
+                  {sortField === "date" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {comments.map((comment) => (
+              {sortedComments.map((comment) => (
                 <tr key={comment.id}>
                   <td>{comment.id}</td>
                   <td>{comment.author_name}</td>

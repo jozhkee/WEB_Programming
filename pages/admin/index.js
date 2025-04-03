@@ -148,12 +148,6 @@ export default function AdminDashboard() {
                   <td>{user.email}</td>
                   <td>{user.is_admin ? "Yes" : "No"}</td>
                   <td>
-                    <Link
-                      href={`/admin/users/${user.id}`}
-                      className="btn btn-sm btn-info me-2"
-                    >
-                      View
-                    </Link>
                     <button className="btn btn-sm btn-danger">Delete</button>
                   </td>
                 </tr>

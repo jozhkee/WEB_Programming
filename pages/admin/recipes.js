@@ -11,6 +11,8 @@ export default function AdminRecipes() {
   const [recipes, setRecipes] = useState([]);
   const [error, setError] = useState("");
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -95,6 +97,29 @@ export default function AdminRecipes() {
     }
   };
 
+  const handleSort = (field) => {
+    const newDirection =
+      sortField === field && sortDirection === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortDirection(newDirection);
+  };
+
+  const sortedRecipes = [...recipes].sort((a, b) => {
+    let comparison = 0;
+    if (sortField === "id") {
+      comparison = a.id - b.id;
+    } else if (sortField === "title") {
+      comparison = a.title.localeCompare(b.title);
+    } else if (sortField === "category") {
+      comparison = a.category.localeCompare(b.category);
+    } else if (sortField === "author") {
+      const authorA = a.author_name || a.userId || "";
+      const authorB = b.author_name || b.userId || "";
+      comparison = String(authorA).localeCompare(String(authorB));
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
   // Helper function to capitalize first letter
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -138,15 +163,42 @@ export default function AdminRecipes() {
           <table className="table table-dark table-striped">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Author</th>
+                <th
+                  onClick={() => handleSort("id")}
+                  style={{ cursor: "pointer" }}
+                >
+                  ID{" "}
+                  {sortField === "id" && (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("title")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Title{" "}
+                  {sortField === "title" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("category")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Category{" "}
+                  {sortField === "category" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  onClick={() => handleSort("author")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Author{" "}
+                  {sortField === "author" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {recipes.map((recipe) => (
+              {sortedRecipes.map((recipe) => (
                 <tr key={recipe.id}>
                   <td>{recipe.id}</td>
                   <td>{recipe.title}</td>
