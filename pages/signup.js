@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function Signup() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -45,13 +45,17 @@ export default function Signup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ username, email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        router.push("/login?registered=true");
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("username", data.user.username || username);
+
+        router.push("/");
       } else {
         setError(data.message || "Signup failed. Please try again.");
       }
@@ -75,15 +79,15 @@ export default function Signup() {
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label htmlFor="name" className="form-label">
-                      Name
+                    <label htmlFor="username" className="form-label">
+                      Username
                     </label>
                     <input
                       type="text"
-                      id="name"
+                      id="username"
                       className="form-control bg-dark text-white"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>

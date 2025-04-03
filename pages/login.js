@@ -41,6 +41,7 @@ export default function Login() {
 
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("username", data.user.username); 
 
         router.push("/");
       } else {

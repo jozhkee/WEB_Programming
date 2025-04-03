@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,7 +57,7 @@ export default function Header() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <span className="fw-bold">{username || userEmail}</span>
+                <span className="fw-bold">{username || username}</span>
               </button>
               <ul
                 className="dropdown-menu dropdown-menu-end"
