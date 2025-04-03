@@ -46,7 +46,7 @@ export default function Home({ recipes = [] }) {
       </Head>
       <Header />
       <main className="container flex-grow-1 py-4 text-center">
-        <h1 className="text-white mb-4">Welcome to the RecipeHub!</h1>
+        <h1 className="text-white mb-4 fw-bold">Welcome to the RecipeHub!</h1>
         <p
           className="text-light mb-5 fs-5 mx-auto"
           style={{ maxWidth: "700px" }}
@@ -77,7 +77,7 @@ export default function Home({ recipes = [] }) {
           </div>
         </section>
         <section className="mt-5">
-          <h2 className="text-white mb-4">Featured Recipes</h2>
+          <h2 className="text-white mb-4 fw-bold">Featured Recipes</h2>
           {loading ? (
             <p>Loading recipes...</p>
           ) : error ? (
@@ -88,7 +88,7 @@ export default function Home({ recipes = [] }) {
                 <div key={recipe.id} className="col">
                   <div className="card h-100 bg-dark text-white border-secondary">
                     <div className="card-body d-flex flex-column">
-                      <h3 className="card-title">{recipe.title}</h3>
+                      <h3 className="card-title fw-bold">{recipe.title}</h3>
                       <p className="card-text flex-grow-1">
                         {recipe.description}
                       </p>
