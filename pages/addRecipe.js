@@ -92,7 +92,7 @@ export default function AddRecipe() {
     }
 
     try {
-      const response = await fetch("/api/recipes/add", {
+      const response = await fetch("/api/recipes/addRecipe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,12 +111,23 @@ export default function AddRecipe() {
       });
 
       const data = await response.json();
+      console.log("Recipe API response:", data); // For debugging
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to add recipe");
       }
 
-      router.push(`/recipes/${data.id}`);
+      // Check for ID in different possible formats
+      const recipeId = data.id || data._id || data.recipe_id || data.recipeId;
+
+      if (recipeId) {
+        router.push(`/recipes/${recipeId}`);
+      } else {
+        // If no ID found, go to recipes list
+        console.error("No recipe ID found in response");
+        setError("Recipe created but couldn't retrieve ID");
+        router.push("/recipes");
+      }
     } catch (error) {
       console.error("Error adding recipe:", error);
       setError(error.message || "Failed to add recipe");

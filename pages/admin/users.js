@@ -4,12 +4,13 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from "next/link";
 
-export default function AdminDashboard() {
+export default function AdminUsers() {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
+  const [deleteMessage, setDeleteMessage] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -64,6 +65,57 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    if (
+      !confirm(
+        "Are you sure you want to delete this user? This will delete all their recipes and comments as well."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete user");
+      }
+
+      setDeleteMessage("User deleted successfully");
+      fetchUsers(localStorage.getItem("authToken"));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const toggleAdminStatus = async (userId, isCurrentlyAdmin) => {
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/toggleAdmin`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_admin: !isCurrentlyAdmin }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update admin status");
+      }
+
+      fetchUsers(localStorage.getItem("authToken"));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="d-flex flex-column min-vh-100">
@@ -86,49 +138,18 @@ export default function AdminDashboard() {
     <div className="d-flex flex-column min-vh-100">
       <Header />
       <main className="container flex-grow-1 py-4">
-        <h1 className="mb-4">Admin Dashboard</h1>
-
-        <div className="row mb-4">
-          <div className="col-md-4">
-            <div className="card bg-dark text-white mb-3">
-              <div className="card-body">
-                <h5 className="card-title">User Management</h5>
-                <p className="card-text">Manage users and permissions</p>
-                <Link href="/admin/users" className="btn btn-primary">
-                  Manage Users
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="card bg-dark text-white mb-3">
-              <div className="card-body">
-                <h5 className="card-title">Recipe Management</h5>
-                <p className="card-text">Moderate all recipes</p>
-                <Link href="/admin/recipes" className="btn btn-primary">
-                  Manage Recipes
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="card bg-dark text-white mb-3">
-              <div className="card-body">
-                <h5 className="card-title">Comment Management</h5>
-                <p className="card-text">Moderate all comments</p>
-                <Link href="/admin/comments" className="btn btn-primary">
-                  Manage Comments
-                </Link>
-              </div>
-            </div>
-          </div>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1>User Management</h1>
+          <Link href="/admin" className="btn btn-secondary">
+            Back to Dashboard
+          </Link>
         </div>
 
         {error && <div className="alert alert-danger">{error}</div>}
+        {deleteMessage && (
+          <div className="alert alert-success">{deleteMessage}</div>
+        )}
 
-        <h2 className="mb-3">Recent Users</h2>
         <div className="table-responsive">
           <table className="table table-dark table-striped">
             <thead>
@@ -136,7 +157,7 @@ export default function AdminDashboard() {
                 <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Is Admin</th>
+                <th>Admin Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -146,7 +167,25 @@ export default function AdminDashboard() {
                   <td>{user.id}</td>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>{user.is_admin ? "Yes" : "No"}</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`admin-toggle-${user.id}`}
+                        checked={user.is_admin}
+                        onChange={() =>
+                          toggleAdminStatus(user.id, user.is_admin)
+                        }
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`admin-toggle-${user.id}`}
+                      >
+                        {user.is_admin ? "Admin" : "User"}
+                      </label>
+                    </div>
+                  </td>
                   <td>
                     <Link
                       href={`/admin/users/${user.id}`}
@@ -154,7 +193,12 @@ export default function AdminDashboard() {
                     >
                       View
                     </Link>
-                    <button className="btn btn-sm btn-danger">Delete</button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

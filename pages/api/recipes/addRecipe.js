@@ -7,6 +7,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  console.log("Recipe data received:", req.body);
+
   try {
     const user = getUserFromToken(req.headers.authorization);
     console.log("Decoded user:", user); // Debug log
@@ -20,15 +22,15 @@ export default async function handler(req, res) {
       description,
       ingredients,
       instructions,
-      prepTime,
-      cookTime,
+      prep_time, // Use the same names as sent from client
+      cook_time, // Use the same names as sent from client
       servings,
       category,
     } = req.body;
 
-    const prep_time = parseInt(prepTime);
-    const cook_time = parseInt(cookTime);
     const servings_count = parseInt(servings);
+
+    console.log("Attempting to save recipe to database");
 
     const [insertedRecipe] = await db
       .insert(recipes)
@@ -44,6 +46,8 @@ export default async function handler(req, res) {
         user_id: user.userId,
       })
       .returning();
+
+    console.log("Database operation result:", insertedRecipe);
 
     res.status(201).json(insertedRecipe);
   } catch (error) {
