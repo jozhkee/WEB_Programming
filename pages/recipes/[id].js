@@ -4,13 +4,12 @@ import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Comments from "../../components/Comments";
-import styles from "../../styles/recipeDetail.module.css";
 
 export default function RecipeDetail({ recipe }) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div className={styles.loadingMessage}>Loading...</div>;
+    return <div className="text-center text-white p-5">Loading...</div>;
   }
 
   // Helper function to capitalize the first letter of a string
@@ -31,44 +30,52 @@ export default function RecipeDetail({ recipe }) {
         <meta name="description" content={recipe.description} />
       </Head>
       <Header />
-      <main className={styles.container}>
-        <Link href="/" className={styles.backLink}>
+      <main className="container bg-dark text-white py-4 px-4 my-4 rounded shadow">
+        <Link
+          href="/"
+          className="d-inline-block mb-4 text-primary text-decoration-none"
+        >
           ← Back to all recipes
         </Link>
 
-        <h1 className={styles.recipeTitle}>{recipe.title}</h1>
-        <p className={styles.recipeDescription}>{recipe.description}</p>
+        <h1 className="mb-3">{recipe.title}</h1>
+        <p className="fs-5 fst-italic text-light mb-4">{recipe.description}</p>
 
-        <div className={styles.metadataContainer}>
-          <div>
-            <strong className={styles.metadataLabel}>Prep Time:</strong>
+        <div
+          className="d-flex flex-wrap justify-content-between bg-dark border border-secondary rounded p-3 mb-4 text-light"
+          style={{ maxWidth: "500px" }}
+        >
+          <div className="p-2">
+            <strong className="text-white">Prep Time:</strong>
             <br />
             {recipe.prep_time} mins
           </div>
-          <div>
-            <strong className={styles.metadataLabel}>Cook Time:</strong>
+          <div className="p-2">
+            <strong className="text-white">Cook Time:</strong>
             <br />
             {recipe.cook_time} mins
           </div>
-          <div>
-            <strong className={styles.metadataLabel}>Servings:</strong>
+          <div className="p-2">
+            <strong className="text-white">Servings:</strong>
             <br />
             {recipe.servings}
           </div>
-          <div>
-            <strong className={styles.metadataLabel}>Category:</strong>
+          <div className="p-2">
+            <strong className="text-white">Category:</strong>
             <br />
             {capitalizeFirstLetter(recipe.category) || "Unknown"}
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>
-          <div className={styles.contentSection}>
-            <h2 className={styles.sectionTitle}>Ingredients</h2>
-            <ul className={styles.ingredientsList}>
+        <div className="row mt-4">
+          <div className="col-md-6 mb-4">
+            <h2 className="border-bottom border-secondary pb-2">Ingredients</h2>
+            <ul className="text-light mt-3 ps-4">
               {Array.isArray(ingredients) ? (
                 ingredients.map((ingredient, index) => (
-                  <li key={index}>{ingredient}</li>
+                  <li key={index} className="mb-2">
+                    {ingredient}
+                  </li>
                 ))
               ) : (
                 <li>Ingredients data not available in expected format</li>
@@ -76,16 +83,19 @@ export default function RecipeDetail({ recipe }) {
             </ul>
           </div>
 
-          <div className={styles.contentSection}>
-            <h2 className={styles.sectionTitle}>Instructions</h2>
-            <div className={styles.instructions}>
+          <div className="col-md-6 mb-4">
+            <h2 className="border-bottom border-secondary pb-2">
+              Instructions
+            </h2>
+            <div className="text-light mt-3">
               {recipe.instructions
                 ? recipe.instructions
                     .split(/\d+\.\s+/)
                     .filter(Boolean)
                     .map((step, index) => (
-                      <p key={index} className={styles.instructionStep}>
-                        {index + 1}. {step.trim()}
+                      <p key={index} className="mb-3">
+                        <span className="text-white">{index + 1}.</span>{" "}
+                        {step.trim()}
                       </p>
                     ))
                 : "No instructions available"}
@@ -93,7 +103,7 @@ export default function RecipeDetail({ recipe }) {
           </div>
         </div>
 
-        <div className={styles.commentsSection}>
+        <div className="mt-5">
           <Comments recipeId={recipe.id} />
         </div>
       </main>

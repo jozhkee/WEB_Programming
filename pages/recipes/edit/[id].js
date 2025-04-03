@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import styles from "../../../styles/addRecipe.module.css";
 
 export default function EditRecipe() {
   const router = useRouter();
@@ -210,202 +209,238 @@ export default function EditRecipe() {
 
   if (isLoading) {
     return (
-      <div className={styles.pageContainer}>
+      <div className="d-flex flex-column min-vh-100">
         <Header />
-        <div className={styles.loadingContainer}>Loading...</div>
+        <div className="container text-center text-white p-5">Loading...</div>
         <Footer />
       </div>
     );
   }
 
   return (
-    <div className={styles.pageContainer}>
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className={styles.mainContent}>
-        <div className={styles.formWrapper}>
-          <h1 className={styles.title}>Edit Recipe</h1>
-          {error && <div className={styles.error}>{error}</div>}
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="title">
-                Recipe Title
-              </label>
-              <input
-                className={styles.input}
-                type="text"
-                id="title"
-                value={recipe.title}
-                onChange={(e) =>
-                  setRecipe({ ...recipe, title: e.target.value })
-                }
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+      <style jsx global>{`
+        .form-control,
+        .form-select {
+          color: white !important;
+          background-color: #212529 !important;
+          border-color: #495057 !important;
+        }
+        .form-control::placeholder,
+        .form-select::placeholder {
+          color: #adb5bd !important;
+        }
+        .form-control:focus,
+        .form-select:focus {
+          box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+        }
+        .form-select option {
+          background-color: #212529;
+          color: white;
+        }
+      `}</style>
+      <main className="container flex-grow-1 py-4">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="card bg-dark text-white shadow">
+              <div className="card-body p-4">
+                <h1 className="text-center mb-4">Edit Recipe</h1>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="description">
-                Description
-              </label>
-              <textarea
-                className={styles.textArea}
-                id="description"
-                value={recipe.description}
-                onChange={(e) =>
-                  setRecipe({ ...recipe, description: e.target.value })
-                }
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+                {error && (
+                  <div className="alert alert-danger" role="alert">
+                    {error}
+                  </div>
+                )}
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Ingredients</label>
-              {recipe.ingredients.map((ingredient, index) => (
-                <div key={index} className={styles.ingredientRow}>
-                  <input
-                    className={styles.input}
-                    type="text"
-                    value={ingredient}
-                    onChange={(e) =>
-                      handleIngredientChange(index, e.target.value)
-                    }
-                    placeholder="Enter ingredient"
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeIngredientField(index)}
-                    className={styles.removeButton}
-                    disabled={isSubmitting || recipe.ingredients.length === 1}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addIngredientField}
-                className={styles.addButton}
-                disabled={isSubmitting}
-              >
-                Add Ingredient
-              </button>
-            </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="title" className="form-label">
+                      Recipe Title
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="title"
+                      value={recipe.title}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, title: e.target.value })
+                      }
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="instructions">
-                Instructions
-              </label>
-              <textarea
-                className={styles.textArea}
-                id="instructions"
-                value={recipe.instructions}
-                onChange={(e) =>
-                  setRecipe({ ...recipe, instructions: e.target.value })
-                }
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+                  <div className="mb-3">
+                    <label htmlFor="description" className="form-label">
+                      Description
+                    </label>
+                    <textarea
+                      className="form-control"
+                      id="description"
+                      rows="3"
+                      value={recipe.description}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, description: e.target.value })
+                      }
+                      required
+                      disabled={isSubmitting}
+                    ></textarea>
+                  </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="category">
-                Category
-              </label>
-              <select
-                className={styles.input}
-                id="category"
-                value={recipe.category}
-                onChange={(e) =>
-                  setRecipe({ ...recipe, category: e.target.value })
-                }
-                required
-                disabled={isSubmitting}
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {capitalizeFirstLetter(category)}
-                  </option>
-                ))}
-              </select>
-            </div>
+                  <div className="mb-3">
+                    <label className="form-label">Ingredients</label>
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <div key={index} className="input-group mb-2">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={ingredient}
+                          onChange={(e) =>
+                            handleIngredientChange(index, e.target.value)
+                          }
+                          placeholder="Enter ingredient"
+                          required
+                          disabled={isSubmitting}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeIngredientField(index)}
+                          className="btn btn-danger"
+                          disabled={
+                            isSubmitting || recipe.ingredients.length === 1
+                          }
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addIngredientField}
+                      className="btn btn-success mt-2"
+                      disabled={isSubmitting}
+                    >
+                      Add Ingredient
+                    </button>
+                  </div>
 
-            <div className={styles.timeServingsRow}>
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="prep_time">
-                  Prep Time (min)
-                </label>
-                <input
-                  className={styles.input}
-                  type="number"
-                  id="prep_time"
-                  min="0"
-                  value={recipe.prepTime}
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, prepTime: e.target.value })
-                  }
-                  required
-                  disabled={isSubmitting}
-                />
+                  <div className="mb-3">
+                    <label htmlFor="instructions" className="form-label">
+                      Instructions
+                    </label>
+                    <textarea
+                      className="form-control"
+                      id="instructions"
+                      rows="5"
+                      value={recipe.instructions}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, instructions: e.target.value })
+                      }
+                      required
+                      disabled={isSubmitting}
+                    ></textarea>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="category" className="form-label">
+                      Category
+                    </label>
+                    <select
+                      className="form-select"
+                      id="category"
+                      value={recipe.category}
+                      onChange={(e) =>
+                        setRecipe({ ...recipe, category: e.target.value })
+                      }
+                      required
+                      disabled={isSubmitting}
+                    >
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {capitalizeFirstLetter(category)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="row mb-3">
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="prepTime" className="form-label">
+                        Prep Time (min)
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="prepTime"
+                        min="0"
+                        value={recipe.prepTime}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, prepTime: e.target.value })
+                        }
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="cookTime" className="form-label">
+                        Cook Time (min)
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="cookTime"
+                        min="0"
+                        value={recipe.cookTime}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, cookTime: e.target.value })
+                        }
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="servings" className="form-label">
+                        Servings
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="servings"
+                        min="1"
+                        value={recipe.servings}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, servings: e.target.value })
+                        }
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="d-grid gap-2 d-md-flex justify-content-md-between">
+                    <button
+                      type="submit"
+                      className="btn btn-primary py-2 px-4"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Saving Changes..." : "Save Changes"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger py-2 px-4"
+                      onClick={handleDelete}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Deleting..." : "Delete Recipe"}
+                    </button>
+                  </div>
+                </form>
               </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="cook_time">
-                  Cook Time (min)
-                </label>
-                <input
-                  className={styles.input}
-                  type="number"
-                  id="cook_time"
-                  min="0"
-                  value={recipe.cookTime}
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, cookTime: e.target.value })
-                  }
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="servings">
-                  Servings
-                </label>
-                <input
-                  className={styles.input}
-                  type="number"
-                  id="servings"
-                  min="1"
-                  value={recipe.servings}
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, servings: e.target.value })
-                  }
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
             </div>
-
-            <div className={styles.buttonGroup}>
-              <button
-                type="submit"
-                className={styles.submitButton}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Saving Changes..." : "Save Changes"}
-              </button>
-              <button
-                type="button"
-                className={styles.deleteButton}
-                onClick={handleDelete}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Deleting..." : "Delete Recipe"}
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </main>
       <Footer />

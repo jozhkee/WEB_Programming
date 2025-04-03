@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import styles from "../styles/index.module.css";
 import Link from "next/link";
 
 export default function MyRecipes() {
@@ -46,48 +45,69 @@ export default function MyRecipes() {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className={styles.mainContainer}>
-        <h1 className={styles.sectionTitle}>My Recipes</h1>
-        {error && <p className={styles.error}>{error}</p>}
-        <ul className={styles.recipeList}>
-          {recipes.length > 0 ? (
-            recipes.map((recipe) => (
-              <li key={recipe.id} className={styles.recipeCard}>
-                <div className={styles.recipeContent}>
-                  <h3 className={styles.recipeTitle}>{recipe.title}</h3>
-                  <p className={styles.recipeDescription}>
-                    {recipe.description}
-                  </p>
-                  <div className={styles.recipeMetadata}>
-                    <p className={styles.recipeDetails}>
-                      <strong>Prep Time:</strong> {recipe.prep_time} mins
+      <main className="container flex-grow-1 py-4">
+        <h1 className="text-center text-white mb-4">My Recipes</h1>
+
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {recipes.length > 0 ? (
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {recipes.map((recipe) => (
+              <div key={recipe.id} className="col">
+                <div className="card h-100 bg-dark text-white border-secondary">
+                  <div className="card-body d-flex flex-column">
+                    <h3 className="card-title">{recipe.title}</h3>
+                    <p className="card-text flex-grow-1">
+                      {recipe.description}
                     </p>
-                    <p className={styles.recipeDetails}>
-                      <strong>Cook Time:</strong> {recipe.cook_time} mins
-                    </p>
-                    <p className={styles.recipeDetails}>
-                      <strong>Servings:</strong> {recipe.servings}
-                    </p>
-                    <p className={styles.recipeDetails}>
-                      <strong>Category:</strong>{" "}
-                      {capitalizeFirstLetter(recipe.category)}
-                    </p>
+                    <div className="mt-2 mb-3">
+                      <p className="mb-1">
+                        <strong>Prep Time:</strong> {recipe.prep_time} mins
+                      </p>
+                      <p className="mb-1">
+                        <strong>Cook Time:</strong> {recipe.cook_time} mins
+                      </p>
+                      <p className="mb-1">
+                        <strong>Servings:</strong> {recipe.servings}
+                      </p>
+                      <p className="mb-0">
+                        <strong>Category:</strong>{" "}
+                        {capitalizeFirstLetter(recipe.category)}
+                      </p>
+                    </div>
+                    <div className="d-grid gap-2">
+                      <Link
+                        href={`/recipes/${recipe.id}`}
+                        className="btn btn-outline-primary"
+                      >
+                        View Recipe
+                      </Link>
+                      <Link
+                        href={`/recipes/edit/${recipe.id}`}
+                        className="btn btn-primary"
+                      >
+                        Edit Recipe
+                      </Link>
+                    </div>
                   </div>
-                  <Link
-                    href={`/recipes/edit/${recipe.id}`}
-                    className={styles.viewRecipeButton}
-                  >
-                    Edit Recipe
-                  </Link>
                 </div>
-              </li>
-            ))
-          ) : (
-            <p className={styles.noRecipes}>No recipes found.</p>
-          )}
-        </ul>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-white p-5">
+            <p className="fs-4">No recipes found.</p>
+            <Link href="/addRecipe" className="btn btn-primary mt-3">
+              Add Your First Recipe
+            </Link>
+          </div>
+        )}
       </main>
       <Footer />
     </div>

@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import styles from "../styles/comments.module.css";
 
 export default function Comments({ recipeId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
+    if (token) {
+      setIsLoggedIn(true);
+    }
     fetchComments();
   }, [recipeId]);
 
@@ -61,51 +62,62 @@ export default function Comments({ recipeId }) {
   };
 
   if (isLoading) {
-    return <div className={styles.loading}>Loading comments...</div>;
+    return (
+      <div className="d-flex justify-content-center my-4">
+        Loading comments...
+      </div>
+    );
   }
 
   return (
-    <div className={styles.commentsContainer}>
-      <h2 className={styles.title}>Comments</h2>
+    <div className="container-fluid mt-4 mb-5 p-4 bg-dark rounded shadow">
+      <h2 className="fs-3 mb-4 text-light">Comments</h2>
 
       {isLoggedIn ? (
-        <form onSubmit={handleSubmit} className={styles.commentForm}>
+        <form onSubmit={handleSubmit} className="mb-4">
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write your comment..."
-            className={styles.commentInput}
+            className="form-control bg-dark text-light mb-3"
             required
           />
-          <button type="submit" className={styles.submitButton}>
+          <button type="submit" className="btn btn-primary">
             Post Comment
           </button>
         </form>
       ) : (
-        <div className={styles.loginPrompt}>
-          <Link href="/login" className={styles.loginLink}>
+        <div className="text-center mb-4">
+          <Link href="/login" className="btn btn-primary">
             Log in to post a comment
           </Link>
         </div>
       )}
 
-      {error && <div className={styles.error}>{error}</div>}
+      {error && <div className="alert alert-danger text-center">{error}</div>}
 
-      <div className={styles.commentsList}>
+      <div className="mt-4">
         {comments.length > 0 ? (
           comments.map((comment) => (
-            <div key={comment.id} className={styles.commentItem}>
-              <div className={styles.commentHeader}>
-                <span className={styles.authorName}>{comment.author_name}</span>
-                <span className={styles.commentDate}>
+            <div
+              key={comment.id}
+              className="card bg-dark mb-3 border-secondary"
+            >
+              <div className="card-header d-flex justify-content-between flex-wrap">
+                <span className="fw-bold text-light">
+                  {comment.author_name}
+                </span>
+                <span className="text-secondary small">
                   {new Date(comment.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <p className={styles.commentContent}>{comment.content}</p>
+              <div className="card-body">
+                <p className="card-text text-light">{comment.content}</p>
+              </div>
             </div>
           ))
         ) : (
-          <p className={styles.noComments}>
+          <p className="text-center text-secondary fst-italic">
             No comments yet. Be the first to comment!
           </p>
         )}
