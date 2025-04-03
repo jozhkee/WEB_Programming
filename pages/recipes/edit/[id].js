@@ -62,16 +62,36 @@ export default function EditRecipe() {
 
           const data = await res.json();
 
-          const ingredientsArray = Array.isArray(data.ingredients)
-            ? data.ingredients
-            : typeof data.ingredients === "string"
-            ? data.ingredients.split("\n").filter((item) => item.trim())
-            : JSON.parse(data.ingredients);
+          // Updated ingredients parsing logic
+          let ingredientsArray;
+          try {
+            if (Array.isArray(data.ingredients)) {
+              ingredientsArray = data.ingredients;
+            } else if (typeof data.ingredients === "string") {
+              // Handle double-encoded JSON string
+              let parsed = data.ingredients;
+              while (typeof parsed === "string") {
+                try {
+                  parsed = JSON.parse(parsed);
+                } catch {
+                  break;
+                }
+              }
+              ingredientsArray = Array.isArray(parsed) ? parsed : [parsed];
+            } else {
+              ingredientsArray = [""];
+            }
+          } catch (e) {
+            console.error("Error parsing ingredients:", e);
+            ingredientsArray = [""];
+          }
 
           setRecipe({
             title: data.title || "",
             description: data.description || "",
-            ingredients: ingredientsArray.length ? ingredientsArray : [""],
+            ingredients: ingredientsArray.filter(
+              (ing) => ing && ing.trim()
+            ) || [""],
             instructions: data.instructions || "",
             prepTime: data.prep_time || data.prepTime || "",
             cookTime: data.cook_time || data.cookTime || "",
