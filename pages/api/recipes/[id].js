@@ -1,5 +1,5 @@
 import { db } from "../../../src";
-import { recipes } from "../../../src/db/schema";
+import { recipes, users } from "../../../src/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function handler(req, res) {
@@ -24,15 +24,18 @@ export default async function handler(req, res) {
         servings: recipes.servings,
         category: recipes.category,
         user_id: recipes.user_id,
+        created_at: recipes.created_at,
+        author_name: users.username,
       })
       .from(recipes)
+      .leftJoin(users, eq(recipes.user_id, users.id))
       .where(eq(recipes.id, recipeId));
 
     if (!recipe.length) {
       return res.status(404).json({ error: "Recipe not found" });
     }
 
-    console.log("Fetched recipe data:", recipe[0]); // Log to see if instructions are present
+    console.log("Fetched recipe data:", recipe[0]);
 
     res.status(200).json(recipe[0]);
   } catch (error) {

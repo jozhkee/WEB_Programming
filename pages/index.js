@@ -92,6 +92,13 @@ export default function Home({ recipes = [] }) {
                       <p className="card-text flex-grow-1">
                         {recipe.description}
                       </p>
+                      <p className="text-secondary mb-2">
+                        By {recipe.author_name || "Unknown"}
+                        {recipe.created_at &&
+                          ` • ${new Date(
+                            recipe.created_at
+                          ).toLocaleDateString()}`}
+                      </p>
                       <div className="d-flex flex-wrap justify-content-between mb-3">
                         <span className="badge bg-secondary m-1">
                           Prep: {recipe.prep_time} mins

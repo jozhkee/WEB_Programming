@@ -44,6 +44,7 @@ export default async function handler(req, res) {
         servings: servings_count,
         category,
         user_id: user.userId,
+        created_at: new Date(),
       })
       .returning();
 

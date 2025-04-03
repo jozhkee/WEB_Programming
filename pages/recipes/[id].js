@@ -67,6 +67,18 @@ export default function RecipeDetail({ recipe }) {
           </div>
         </div>
 
+        <div className="mb-4 text-light">
+          <p>
+            <strong>Author:</strong> {recipe.author_name || "Unknown"}
+          </p>
+          <p>
+            <strong>Created:</strong>{" "}
+            {recipe.created_at
+              ? new Date(recipe.created_at).toLocaleDateString()
+              : "Unknown date"}
+          </p>
+        </div>
+
         <div className="row mt-4">
           <div className="col-md-6 mb-4">
             <h2 className="border-bottom border-secondary pb-2">Ingredients</h2>
