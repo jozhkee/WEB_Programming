@@ -54,6 +54,7 @@ export default function Signup() {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("username", data.user.username || username);
+        localStorage.setItem("isAdmin", data.user.is_admin || false);
 
         router.push("/");
       } else {

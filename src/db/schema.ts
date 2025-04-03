@@ -6,6 +6,7 @@ import {
   jsonb,
   varchar,
   timestamp,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const recipes = pgTable("recipes", {
@@ -23,9 +24,10 @@ export const recipes = pgTable("recipes", {
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  username: varchar("username", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
+  is_admin: boolean("is_admin").default(false).notNull(),
 });
 
 export const comments = pgTable("comments", {

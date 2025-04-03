@@ -23,6 +23,7 @@ export const authUtils = {
         userId: user.id,
         email: user.email,
         username: user.username,
+        isAdmin: user.is_admin || false,
       },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
@@ -77,6 +78,13 @@ export const authUtils = {
       .where(eq(users.username, username))
       .limit(1);
     return user.length > 0 ? user[0] : null;
+  },
+
+  /**
+   * Check if user is admin
+   */
+  isAdmin(user) {
+    return user && user.isAdmin === true;
   },
 
   /**

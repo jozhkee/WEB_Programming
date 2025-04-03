@@ -41,7 +41,8 @@ export default function Login() {
 
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
-        localStorage.setItem("username", data.user.username); 
+        localStorage.setItem("username", data.user.username);
+        localStorage.setItem("isAdmin", data.user.is_admin || false);
 
         router.push("/");
       } else {

@@ -6,6 +6,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -14,12 +15,15 @@ export default function Header() {
       setIsLoggedIn(true);
       const storedEmail = localStorage.getItem("userEmail");
       const storedUsername = localStorage.getItem("username");
+      const storedIsAdmin = localStorage.getItem("isAdmin") === "true";
+
       if (storedEmail) {
         setUserEmail(storedEmail);
       }
       if (storedUsername) {
         setUsername(storedUsername);
       }
+      setIsAdmin(storedIsAdmin);
     }
   }, []);
 
@@ -27,6 +31,7 @@ export default function Header() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("username");
+    localStorage.removeItem("isAdmin");
     setIsLoggedIn(false);
     router.push("/");
   };
@@ -57,7 +62,12 @@ export default function Header() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <span className="fw-bold">{username || username}</span>
+                <span className="fw-bold">
+                  {username || username}
+                  {isAdmin && (
+                    <span className="ms-1 badge bg-danger">Admin</span>
+                  )}
+                </span>
               </button>
               <ul
                 className="dropdown-menu dropdown-menu-end"
@@ -73,6 +83,13 @@ export default function Header() {
                     My Recipes
                   </Link>
                 </li>
+                {isAdmin && (
+                  <li>
+                    <Link href="/admin" className="dropdown-item text-danger">
+                      Admin Dashboard
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <button onClick={handleLogout} className="dropdown-item">
                     Logout

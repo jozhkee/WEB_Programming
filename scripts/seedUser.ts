@@ -21,22 +21,26 @@ export async function seedUsers() {
           email: "admin@example.com",
           username: "admin",
           password: adminPassword,
+          is_admin: true, // Set admin flag
         },
         {
           email: "chef@example.com",
           username: "masterchef",
           password: chefPassword,
+          is_admin: false,
         },
         {
           email: "foodie@example.com",
           username: "foodlover",
           password: foodiePassword,
+          is_admin: false,
         },
       ])
       .returning({
         id: users.id,
         email: users.email,
         username: users.username,
+        is_admin: users.is_admin,
       });
 
     console.log(
