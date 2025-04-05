@@ -89,7 +89,7 @@ export default function AdminDashboard() {
         <h1 className="mb-4">Admin Dashboard</h1>
 
         <div className="row mb-4">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="card bg-dark text-white mb-3">
               <div className="card-body">
                 <h5 className="card-title">User Management</h5>
@@ -101,7 +101,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="card bg-dark text-white mb-3">
               <div className="card-body">
                 <h5 className="card-title">Recipe Management</h5>
@@ -113,13 +113,25 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="card bg-dark text-white mb-3">
               <div className="card-body">
                 <h5 className="card-title">Comment Management</h5>
                 <p className="card-text">Moderate all comments</p>
                 <Link href="/admin/comments" className="btn btn-primary">
                   Manage Comments
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-3">
+            <div className="card bg-dark text-white mb-3">
+              <div className="card-body">
+                <h5 className="card-title">Category Management</h5>
+                <p className="card-text">Manage recipe categories</p>
+                <Link href="/admin/categories" className="btn btn-primary">
+                  Manage Categories
                 </Link>
               </div>
             </div>
