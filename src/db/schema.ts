@@ -40,3 +40,10 @@ export const comments = pgTable("comments", {
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 50 }).notNull().unique(),
+  display_name: varchar("display_name", { length: 100 }).notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});

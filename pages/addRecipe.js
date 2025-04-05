@@ -8,20 +8,8 @@ export default function AddRecipe() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const categories = [
-    "pasta",
-    "desserts",
-    "main dishes",
-    "vegan",
-    "vegetarian",
-    "salads",
-    "sandwiches",
-    "finger foods",
-    "soups",
-    "breakfast",
-    "drinks",
-  ];
+  const [categories, setCategories] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
   const [recipe, setRecipe] = useState({
     title: "",
@@ -31,7 +19,7 @@ export default function AddRecipe() {
     prepTime: "",
     cookTime: "",
     servings: "",
-    category: categories[0],
+    category: "",
   });
 
   useEffect(() => {
@@ -42,6 +30,31 @@ export default function AddRecipe() {
       setIsLoggedIn(true);
     }
   }, [router]);
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        const data = await res.json();
+        setCategories(data);
+
+        // Set default category if available
+        if (data.length > 0) {
+          setRecipe((prev) => ({ ...prev, category: data[0].name }));
+        }
+
+        setIsLoadingCategories(false);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setError("Failed to load categories");
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleIngredientChange = (index, value) => {
     const newIngredients = [...recipe.ingredients];
@@ -269,22 +282,33 @@ export default function AddRecipe() {
                     <label htmlFor="category" className="form-label">
                       Category
                     </label>
-                    <select
-                      className="form-select"
-                      id="category"
-                      value={recipe.category}
-                      onChange={(e) =>
-                        setRecipe({ ...recipe, category: e.target.value })
-                      }
-                      required
-                      disabled={isSubmitting}
-                    >
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {capitalizeFirstLetter(category)}
-                        </option>
-                      ))}
-                    </select>
+                    {isLoadingCategories ? (
+                      <div
+                        className="spinner-border spinner-border-sm text-light"
+                        role="status"
+                      >
+                        <span className="visually-hidden">
+                          Loading categories...
+                        </span>
+                      </div>
+                    ) : (
+                      <select
+                        className="form-select"
+                        id="category"
+                        value={recipe.category}
+                        onChange={(e) =>
+                          setRecipe({ ...recipe, category: e.target.value })
+                        }
+                        required
+                        disabled={isSubmitting}
+                      >
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.name}>
+                            {category.display_name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </div>
 
                   <div className="row mb-3">

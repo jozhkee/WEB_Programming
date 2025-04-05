@@ -2,12 +2,31 @@ import Head from "next/head";
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home({ recipes = [] }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        const data = await res.json();
+        setCategories(data);
+        setIsLoadingCategories(false);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   // Helper function to capitalize the first letter of a string
   const capitalizeFirstLetter = (string) => {
@@ -18,21 +37,6 @@ export default function Home({ recipes = [] }) {
   const filteredRecipes = selectedCategory
     ? recipes.filter((recipe) => recipe.category === selectedCategory)
     : recipes;
-
-  const categories = [
-    "All",
-    "Pasta",
-    "Desserts",
-    "Main Dishes",
-    "Vegan",
-    "Vegetarian",
-    "Salads",
-    "Sandwiches",
-    "Finger Foods",
-    "Soups",
-    "Breakfast",
-    "Drinks",
-  ];
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -56,24 +60,40 @@ export default function Home({ recipes = [] }) {
         </p>
         <section className="mb-4">
           <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className={`btn ${
-                  (selectedCategory === "" && category === "All") ||
-                  selectedCategory === category.toLowerCase()
-                    ? "btn-primary fw-bold"
-                    : "btn-outline-primary fw-bold"
-                } m-1`}
-                onClick={() =>
-                  setSelectedCategory(
-                    category === "All" ? "" : category.toLowerCase()
-                  )
-                }
+            <button
+              key="all"
+              className={`btn ${
+                selectedCategory === ""
+                  ? "btn-primary fw-bold"
+                  : "btn-outline-primary fw-bold"
+              } m-1`}
+              onClick={() => setSelectedCategory("")}
+            >
+              All
+            </button>
+
+            {isLoadingCategories ? (
+              <div
+                className="spinner-border spinner-border-sm text-light m-3"
+                role="status"
               >
-                {category}
-              </button>
-            ))}
+                <span className="visually-hidden">Loading categories...</span>
+              </div>
+            ) : (
+              categories.map((category) => (
+                <button
+                  key={category.id}
+                  className={`btn ${
+                    selectedCategory === category.name
+                      ? "btn-primary fw-bold"
+                      : "btn-outline-primary fw-bold"
+                  } m-1`}
+                  onClick={() => setSelectedCategory(category.name)}
+                >
+                  {category.display_name}
+                </button>
+              ))
+            )}
           </div>
         </section>
         <section className="mt-5">

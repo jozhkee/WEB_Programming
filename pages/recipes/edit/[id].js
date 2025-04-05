@@ -11,20 +11,7 @@ export default function EditRecipe() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const categories = [
-    "pasta",
-    "desserts",
-    "main dishes",
-    "vegan",
-    "vegetarian",
-    "salads",
-    "sandwiches",
-    "finger foods",
-    "soups",
-    "breakfast",
-    "drinks",
-  ];
+  const [categories, setCategories] = useState([]);
 
   const [recipe, setRecipe] = useState({
     title: "",
@@ -34,7 +21,7 @@ export default function EditRecipe() {
     prepTime: "",
     cookTime: "",
     servings: "",
-    category: categories[0],
+    category: "",
   });
 
   useEffect(() => {
@@ -45,6 +32,29 @@ export default function EditRecipe() {
       setIsLoggedIn(true);
     }
   }, [router]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (id && isLoggedIn) {
@@ -96,7 +106,9 @@ export default function EditRecipe() {
             prepTime: data.prep_time || data.prepTime || "",
             cookTime: data.cook_time || data.cookTime || "",
             servings: data.servings || "",
-            category: data.category || categories[0],
+            category:
+              data.category ||
+              (categories.length > 0 ? categories[0].name : ""),
           });
           setIsLoading(false);
         } catch (err) {
@@ -107,7 +119,7 @@ export default function EditRecipe() {
 
       fetchRecipe();
     }
-  }, [id, isLoggedIn]);
+  }, [id, isLoggedIn, categories]);
 
   const handleIngredientChange = (index, value) => {
     const newIngredients = [...recipe.ingredients];
@@ -142,6 +154,7 @@ export default function EditRecipe() {
   };
 
   const capitalizeFirstLetter = (string) => {
+    if (typeof string !== "string") return "";
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
 
@@ -172,7 +185,7 @@ export default function EditRecipe() {
           prep_time: parseInt(recipe.prepTime),
           cook_time: parseInt(recipe.cookTime),
           servings: parseInt(recipe.servings),
-          category: recipe.category.toLowerCase(),
+          category: recipe.category,
         }),
       });
 
@@ -377,8 +390,8 @@ export default function EditRecipe() {
                       disabled={isSubmitting}
                     >
                       {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {capitalizeFirstLetter(category)}
+                        <option key={category.id} value={category.name}>
+                          {category.display_name}
                         </option>
                       ))}
                     </select>

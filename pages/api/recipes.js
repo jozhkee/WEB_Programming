@@ -5,7 +5,6 @@ import { eq } from "drizzle-orm";
 export default async function handler(req, res) {
   try {
     console.log("API: Fetching recipes from database");
-    // Fetch recipes with author information
     const allRecipes = await db
       .select({
         id: recipes.id,

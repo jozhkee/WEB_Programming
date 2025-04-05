@@ -1,26 +1,14 @@
 import { db } from "../src";
-import { recipes, users } from "../src/db/schema";
+import { recipes, users, categories } from "../src/db/schema";
 import { seedUsers } from "./seedUser";
-
-const categories = [
-  "pasta",
-  "desserts",
-  "main dishes",
-  "vegan",
-  "vegetarian",
-  "salads",
-  "sandwiches",
-  "finger foods",
-  "soups",
-  "breakfast",
-  "drinks",
-];
+import { seedCategories } from "./seedCategories";
 
 export async function seedRecipes() {
   try {
     console.log("Starting to seed recipes...");
 
     let seededUsers;
+    let seededCategories;
 
     const existingUsers = await db.select().from(users);
 
@@ -34,6 +22,22 @@ export async function seedRecipes() {
       );
       seededUsers = existingUsers;
     }
+
+    const existingCategories = await db.select().from(categories);
+
+    if (existingCategories.length === 0) {
+      console.log("No categories found. Creating categories first...");
+      seededCategories = await seedCategories();
+    } else {
+      console.log(
+        "Using existing categories:",
+        existingCategories.map((c) => c.name).join(", ")
+      );
+      seededCategories = existingCategories;
+    }
+
+    // Store category names for lookup
+    const categoryNames = seededCategories.map((c) => c.name);
 
     const recipesByCategory = {
       pasta: [
@@ -495,7 +499,7 @@ export async function seedRecipes() {
     const allRecipes = [];
     let userIndex = 0;
 
-    for (const category of categories) {
+    for (const category of categoryNames) {
       const recipesForCategory = recipesByCategory[category] || [];
 
       for (const recipeData of recipesForCategory) {
@@ -521,7 +525,7 @@ export async function seedRecipes() {
       });
 
     console.log(
-      `Seeded ${insertedRecipes.length} recipes across ${categories.length} categories`
+      `Seeded ${insertedRecipes.length} recipes across ${categoryNames.length} categories`
     );
 
     return insertedRecipes;
