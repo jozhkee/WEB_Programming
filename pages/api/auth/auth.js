@@ -5,9 +5,10 @@ import { db } from "../../../src/";
 import { users } from "../../../src/db/schema";
 
 // JWT configuration
-const JWT_SECRET =
-  process.env.JWT_SECRET ||
-  "91f13ecaa38a54734ab74a9025a5dfa7926b80d08e4d6b1cd699758e2b46c6847b7cd9b861575aa0449e5718929548d169e49d7f7bff9f201d8795bb2cab5a8a";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("WARNING: JWT_SECRET environment variable is not set");
+}
 const JWT_EXPIRES_IN = "24h";
 
 /**
