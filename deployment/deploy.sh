@@ -32,6 +32,10 @@ else
   echo ".env file already exists, using existing configuration"
 fi
 
+#Move Dockerfile to parent directory
+echo "Moving Dockerfile to parent directory..."
+mv Dockerfile ../
+
 # Build and start containers
 echo "Building and starting Docker containers..."
 sudo docker-compose up -d
