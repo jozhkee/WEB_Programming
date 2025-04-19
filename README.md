@@ -38,7 +38,7 @@ RecipeHub is a comprehensive recipe sharing web application built with **Next.js
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/jozhkee/WEB_Programming
-   cd recipehub
+   cd WEB_Programming
    ```
 
 2. **Install dependencies**:
