@@ -21,6 +21,7 @@ export const recipes = pgTable("recipes", {
   category: varchar("category", { length: 50 }).notNull(),
   user_id: integer("user_id").notNull(),
   created_at: timestamp("created_at").defaultNow().notNull(),
+  image_url: text("image_url"),
 });
 
 export const users = pgTable("users", {

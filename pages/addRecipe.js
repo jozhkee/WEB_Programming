@@ -20,6 +20,7 @@ export default function AddRecipe() {
     cookTime: "",
     servings: "",
     category: "",
+    imageFile: null,
   });
 
   useEffect(() => {
@@ -105,38 +106,45 @@ export default function AddRecipe() {
     }
 
     try {
+      const formData = new FormData();
+      
+      const recipeData = {
+        title: recipe.title,
+        description: recipe.description,
+        ingredients: recipe.ingredients.filter((i) => i.trim()),
+        instructions: recipe.instructions,
+        prep_time: parseInt(recipe.prepTime),
+        cook_time: parseInt(recipe.cookTime),
+        servings: parseInt(recipe.servings),
+        category: recipe.category.toLowerCase(),
+      };
+      
+      formData.append('recipeData', JSON.stringify(recipeData));
+      
+      if (recipe.imageFile) {
+        formData.append('image', recipe.imageFile);
+      }
+      
       const response = await fetch("/api/recipes/addRecipe", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
-        body: JSON.stringify({
-          title: recipe.title,
-          description: recipe.description,
-          ingredients: recipe.ingredients.filter((i) => i.trim()),
-          instructions: recipe.instructions,
-          prep_time: parseInt(recipe.prepTime),
-          cook_time: parseInt(recipe.cookTime),
-          servings: parseInt(recipe.servings),
-          category: recipe.category.toLowerCase(),
-        }),
+        body: formData,
       });
 
       const data = await response.json();
-      console.log("Recipe API response:", data); // For debugging
+      console.log("Recipe API response:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to add recipe");
       }
 
-      // Check for ID in different possible formats
       const recipeId = data.id || data._id || data.recipe_id || data.recipeId;
 
       if (recipeId) {
         router.push(`/recipes/${recipeId}`);
       } else {
-        // If no ID found, go to recipes list
         console.error("No recipe ID found in response");
         setError("Recipe created but couldn't retrieve ID");
         router.push("/recipes");
@@ -276,6 +284,42 @@ export default function AddRecipe() {
                       required
                       disabled={isSubmitting}
                     ></textarea>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="recipeImage" className="form-label">
+                      Recipe Image (Optional)
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="recipeImage"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files[0]) {
+                          setRecipe({ ...recipe, imageFile: e.target.files[0] });
+                        }
+                      }}
+                      disabled={isSubmitting}
+                    />
+                    {recipe.imageFile && (
+                      <div className="mt-2">
+                        <div className="d-flex align-items-center">
+                          <span className="me-2">
+                            Selected: {recipe.imageFile.name}
+                          </span>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() =>
+                              setRecipe({ ...recipe, imageFile: null })
+                            }
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mb-3">

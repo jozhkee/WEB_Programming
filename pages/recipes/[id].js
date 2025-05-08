@@ -41,6 +41,17 @@ export default function RecipeDetail({ recipe }) {
         <h1 className="mb-3">{recipe.title}</h1>
         <p className="fs-5 fst-italic text-light mb-4">{recipe.description}</p>
 
+        {recipe.image_url && (
+          <div className="mb-4">
+            <img
+              src={recipe.image_url}
+              alt={recipe.title}
+              className="img-fluid rounded shadow"
+              style={{ maxHeight: "400px" }}
+            />
+          </div>
+        )}
+
         <div
           className="d-flex flex-wrap justify-content-between bg-dark border border-secondary rounded p-3 mb-4 text-light"
           style={{ maxWidth: "500px" }}

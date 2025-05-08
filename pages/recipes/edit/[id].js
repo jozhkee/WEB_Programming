@@ -22,6 +22,8 @@ export default function EditRecipe() {
     cookTime: "",
     servings: "",
     category: "",
+    imageFile: null,
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -72,13 +74,11 @@ export default function EditRecipe() {
 
           const data = await res.json();
 
-          // Updated ingredients parsing logic
           let ingredientsArray;
           try {
             if (Array.isArray(data.ingredients)) {
               ingredientsArray = data.ingredients;
             } else if (typeof data.ingredients === "string") {
-              // Handle double-encoded JSON string
               let parsed = data.ingredients;
               while (typeof parsed === "string") {
                 try {
@@ -109,6 +109,7 @@ export default function EditRecipe() {
             category:
               data.category ||
               (categories.length > 0 ? categories[0].name : ""),
+            imageUrl: data.image_url || "",
           });
           setIsLoading(false);
         } catch (err) {
@@ -171,22 +172,32 @@ export default function EditRecipe() {
     }
 
     try {
+      const formData = new FormData();
+      
+      const recipeData = {
+        title: recipe.title,
+        description: recipe.description,
+        ingredients: recipe.ingredients.filter((i) => i.trim()),
+        instructions: recipe.instructions,
+        prep_time: parseInt(recipe.prepTime),
+        cook_time: parseInt(recipe.cookTime),
+        servings: parseInt(recipe.servings),
+        category: recipe.category,
+        removeImage: recipe.imageUrl === "" && !recipe.imageFile,
+      };
+      
+      formData.append('recipeData', JSON.stringify(recipeData));
+      
+      if (recipe.imageFile) {
+        formData.append('image', recipe.imageFile);
+      }
+      
       const response = await fetch(`/api/recipes/edit/${id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
-        body: JSON.stringify({
-          title: recipe.title,
-          description: recipe.description,
-          ingredients: recipe.ingredients.filter((i) => i.trim()),
-          instructions: recipe.instructions,
-          prep_time: parseInt(recipe.prepTime),
-          cook_time: parseInt(recipe.cookTime),
-          servings: parseInt(recipe.servings),
-          category: recipe.category,
-        }),
+        body: formData,
       });
 
       const data = await response.json();
@@ -395,6 +406,58 @@ export default function EditRecipe() {
                         </option>
                       ))}
                     </select>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="recipeImage" className="form-label">
+                      Recipe Image
+                    </label>
+                    {recipe.imageUrl && (
+                      <div className="mb-2">
+                        <img 
+                          src={recipe.imageUrl} 
+                          alt="Current recipe image" 
+                          className="img-fluid mb-2" 
+                          style={{ maxHeight: "200px", borderRadius: "4px" }} 
+                        />
+                        <div>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => setRecipe({ ...recipe, imageUrl: "" })}
+                            disabled={isSubmitting}
+                          >
+                            Remove Current Image
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      className="form-control mt-2"
+                      id="recipeImage"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files[0]) {
+                          setRecipe({ ...recipe, imageFile: e.target.files[0], imageUrl: "" });
+                        }
+                      }}
+                      disabled={isSubmitting}
+                    />
+                    {recipe.imageFile && (
+                      <div className="mt-2">
+                        <div className="d-flex align-items-center">
+                          <span className="me-2">Selected: {recipe.imageFile.name}</span>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => setRecipe({ ...recipe, imageFile: null })}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="row mb-3">
