@@ -19,7 +19,6 @@ async function handler(req, res) {
         .json({ error: "Name and display name are required" });
     }
 
-    // Check if category with this name already exists
     const existingCategory = await db
       .select()
       .from(categories)
@@ -31,7 +30,6 @@ async function handler(req, res) {
         .json({ error: "A category with this name already exists" });
     }
 
-    // Insert new category
     const newCategory = await db
       .insert(categories)
       .values({

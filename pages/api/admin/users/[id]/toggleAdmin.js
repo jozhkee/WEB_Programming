@@ -39,7 +39,6 @@ async function handler(req, res) {
     }
   }
 
-  // Method not supported
   return res.status(405).json({ error: "Method not allowed" });
 }
 

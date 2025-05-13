@@ -63,7 +63,7 @@ export default function Header() {
                 aria-expanded="false"
               >
                 <span className="fw-bold">
-                  {username || username}
+                  {username || userEmail}
                   {isAdmin && (
                     <span className="ms-1 badge bg-danger">Admin</span>
                   )}

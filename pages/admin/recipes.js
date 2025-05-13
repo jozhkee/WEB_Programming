@@ -21,7 +21,6 @@ export default function AdminRecipes() {
       return;
     }
 
-    // Check if the user is an admin
     const checkAdmin = async () => {
       try {
         const response = await fetch("/api/admin/verify", {
@@ -90,7 +89,6 @@ export default function AdminRecipes() {
       }
 
       setDeleteMessage("Recipe deleted successfully");
-      // Refresh the recipe list
       fetchRecipes(localStorage.getItem("authToken"));
     } catch (err) {
       setError(err.message);

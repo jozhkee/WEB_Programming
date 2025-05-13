@@ -13,8 +13,6 @@ export default function AdminCategories() {
   const [successMessage, setSuccessMessage] = useState("");
   const [sortField, setSortField] = useState("name");
   const [sortDirection, setSortDirection] = useState("asc");
-
-  // New category form state
   const [newCategory, setNewCategory] = useState({
     name: "",
     display_name: "",
@@ -27,7 +25,6 @@ export default function AdminCategories() {
       return;
     }
 
-    // Check if the user is an admin
     const checkAdmin = async () => {
       try {
         const response = await fetch("/api/admin/verify", {
@@ -116,7 +113,6 @@ export default function AdminCategories() {
     setError("");
     setSuccessMessage("");
 
-    // Simple validation
     if (!newCategory.name.trim() || !newCategory.display_name.trim()) {
       setError("Both name and display name are required");
       return;

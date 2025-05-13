@@ -21,7 +21,6 @@ export default function AdminUsers() {
       return;
     }
 
-    // Check if the user is an admin
     const checkAdmin = async () => {
       try {
         const response = await fetch("/api/admin/verify", {

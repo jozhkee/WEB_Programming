@@ -4,16 +4,12 @@ import { eq } from "drizzle-orm";
 import { db } from "../../../src/";
 import { users } from "../../../src/db/schema";
 
-// JWT configuration
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   console.error("WARNING: JWT_SECRET environment variable is not set");
 }
 const JWT_EXPIRES_IN = "24h";
 
-/**
- * Core authentication utilities
- */
 export const authUtils = {
   /**
    * Generate JWT token for user
@@ -102,7 +98,6 @@ export const authUtils = {
       const token = authHeader.split(" ")[1];
       const decoded = this.verifyToken(token);
 
-      // Add user data to request
       return { authenticated: true, user: decoded };
     } catch (error) {
       return { authenticated: false, error: "Authentication failed" };

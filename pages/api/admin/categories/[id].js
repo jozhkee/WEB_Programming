@@ -14,7 +14,6 @@ async function handler(req, res) {
   // Handle DELETE request
   if (req.method === "DELETE") {
     try {
-      // First check if this is the last category - don't allow deletion of the last category
       const allCategories = await db.select().from(categories);
       if (allCategories.length <= 1) {
         return res.status(400).json({
@@ -39,7 +38,6 @@ async function handler(req, res) {
     }
   }
 
-  // Method not supported
   return res.status(405).json({ error: "Method not allowed" });
 }
 
