@@ -11,7 +11,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
     volumes:
-      - uploads-data:/WEB_PROGRAMMING/public/uploads
+      - uploads-data:/app/public/uploads
 
   postgres:
     image: postgres:14
