@@ -17,7 +17,6 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized: Invalid user" });
     }
 
-    // Fetch recipes for the logged-in user
     const userRecipes = await db
       .select()
       .from(recipes)

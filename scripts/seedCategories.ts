@@ -15,7 +15,6 @@ export async function seedCategories() {
       return existingCategories;
     }
 
-    // Categories data with both storage value and display name
     const categoriesData = [
       { name: "pasta", display_name: "Pasta" },
       { name: "desserts", display_name: "Desserts" },

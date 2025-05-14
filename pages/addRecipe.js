@@ -32,7 +32,6 @@ export default function AddRecipe() {
     }
   }, [router]);
 
-  // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -41,7 +40,6 @@ export default function AddRecipe() {
         const data = await res.json();
         setCategories(data);
 
-        // Set default category if available
         if (data.length > 0) {
           setRecipe((prev) => ({ ...prev, category: data[0].name }));
         }

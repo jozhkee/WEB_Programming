@@ -23,7 +23,7 @@ export async function seedRecipes() {
     // Store category names for lookup
     const categoryNames = seededCategories.map((c) => c.name);
 
-    /* Check if recipes already exist
+    // Check if recipes already exist
     const existingRecipes = await db
       .select({ count: { value: recipes.id } })
       .from(recipes);
@@ -33,7 +33,7 @@ export async function seedRecipes() {
         `Found ${existingRecipes[0].count.value} existing recipes. Skipping seeding.`
       );
       return await db.select().from(recipes);
-    }*/
+    }
 
     const ingredientsByCategory = {
       pasta: [
