@@ -33,7 +33,6 @@ export default function Signup() {
       return;
     }
 
-    // Validate password strength
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
       return;

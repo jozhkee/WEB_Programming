@@ -33,7 +33,6 @@ export default function Home({ recipes = [] }) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
 
-  // Filter recipes based on the selected category
   const filteredRecipes = selectedCategory
     ? recipes.filter((recipe) => recipe.category === selectedCategory)
     : recipes;

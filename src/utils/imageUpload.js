@@ -37,7 +37,6 @@ export const saveImageToLocal = async (req) => {
         try {
           fs.renameSync(file.filepath, newPath);
 
-          // Use API route instead of static path
           imageUrl = `/api/uploads/${uniqueFilename}`;
         } catch (error) {
           reject(error);

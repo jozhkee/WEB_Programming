@@ -21,7 +21,6 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized: Invalid user" });
     }
 
-    // Process the uploaded image and form data
     const { recipeData, imageUrl } = await saveImageToLocal(req);
 
     const {

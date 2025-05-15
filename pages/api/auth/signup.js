@@ -3,7 +3,6 @@ import { db } from "../../../src/";
 import { users } from "../../../src/db/schema";
 
 export default async function handler(req, res) {
-  // Only allow POST method
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -11,7 +10,6 @@ export default async function handler(req, res) {
   try {
     const { email, username, password } = req.body;
 
-    // Basic validation
     if (!email || !password) {
       return res
         .status(400)
@@ -36,7 +34,6 @@ export default async function handler(req, res) {
       return res.status(409).json({ message: "Username already taken" });
     }
 
-    // Hash password
     const hashedPassword = await authUtils.hashPassword(password);
 
     try {
@@ -46,7 +43,6 @@ export default async function handler(req, res) {
         password: hashedPassword,
       });
 
-      // Fetch the created user
       const newUser = await authUtils.getUserByEmail(email);
 
       if (!newUser) {

@@ -22,7 +22,6 @@ const getUserFromToken = async (token) => {
 };
 
 export default async function handler(req, res) {
-  // Handle GET request for fetching comments
   if (req.method === "GET") {
     const { recipe_id } = req.query;
 
@@ -44,7 +43,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // Handle POST request for creating comments
   if (req.method === "POST") {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
