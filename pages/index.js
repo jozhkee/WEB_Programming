@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 
 export default function Home({ recipes = [] }) {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
