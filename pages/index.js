@@ -158,7 +158,7 @@ export default function Home({ recipes = [] }) {
 // Fetch data from the API
 export async function getServerSideProps() {
   try {
-    const res = await fetch("http://localhost:3000/api/recipes");
+    const res = await fetch("/api/recipes");
 
     if (!res.ok) {
       throw new Error(`API returned ${res.status}`);
